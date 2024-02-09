@@ -10,13 +10,24 @@ app = Flask(__name__)
 app.secret_key = 'test123'  # Replace with a secure secret key
 
 # Configure SQLite database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database file
+mysql_config = {
+    "user": "root",
+    "password": "",
+    "host": "127.0.0.1",
+    "port": "3306",
+    "database": "test_skripsi",
+}
+
+# Configure MySQL database
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{mysql_config['user']}:{mysql_config['password']}@{mysql_config['host']}:{mysql_config['port']}/{mysql_config['database']}?charset=utf8mb4"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable SQLAlchemy event system
 db = SQLAlchemy(app)
 
 # Define User model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
 @app.route('/')
@@ -37,14 +48,17 @@ def signup():
 def process_signup():
     data = request.form
     username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
-    # Check if the username is already taken
+    # Check if the username or email is already taken
     if User.query.filter_by(username=username).first():
         return 'Username already exists. Please choose a different username.'
+    if User.query.filter_by(email=email).first():
+        return 'Email already exists. Please use a different email address.'
 
     # Store the new user data in the database
-    new_user = User(username=username, password=password)
+    new_user = User(username=username, email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
 
