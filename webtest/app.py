@@ -3,8 +3,8 @@ from flask import Flask, render_template, request, Response, session, redirect, 
 from flask_sqlalchemy import SQLAlchemy
 from gtts import gTTS
 import io
+app = Flask(__name__, static_folder='static')
 
-app = Flask(__name__)
 app.secret_key = 'test123'  # Ganti dengan secret key yang lebih aman
 
 # Configure SQLite database

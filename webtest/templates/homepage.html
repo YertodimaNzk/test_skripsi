@@ -4,13 +4,13 @@
     <head>
         <title>Learn With Us</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../templates/style/homepage.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/homepage.css') }}">
     </head>
     <body>
         <div class="header">
             <div class="header-left-section">
                 <a href="homepage.html">
-                    <img class="logo" src="image/logo.png">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
                 </a>  
             </div>
             <div class="header-right-section">
@@ -28,7 +28,7 @@
                 <button class="content-button">Pilih Materi</button>
             </div>
             <div class="right-section-content">
-                <img class="picture-content" src="image/content.png">
+                <img class="picture-content" src="{{ url_for('static', filename='image/content.png') }}">
             </div>
         </div>
 
@@ -40,19 +40,19 @@
                         <a href="indocourse.html">
                             <span class="container-title speakable">Bahasa Indonesia</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
     
                     <div class="container-course">
                         <a href="/engcourse.html">
                             <span class="container-title speakable">Bahasa Inggris</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
                 </div>
             </div>
         </div>
 
-        <script src="/webtest/templates/scrip/homepage.js"></script>
+        <script src="{{ url_for('static', filename='scrip/homepage.js') }}"></script>
   </body>
   </html>
