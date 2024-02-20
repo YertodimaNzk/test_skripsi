@@ -4,10 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from gtts import gTTS
 import io
 
-
-
 app = Flask(__name__)
-app.secret_key = 'test123'  # Replace with a secure secret key
+app.secret_key = 'test123'  # Ganti dengan secret key yang lebih aman
 
 # Configure SQLite database
 mysql_config = {
@@ -32,64 +30,14 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-    if 'username' in session:
-        return redirect(url_for('dashboard'))
-    return render_template('index.html')
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-@app.route('/signup')
-def signup():
-    return render_template('signup.html')
-
-@app.route('/signup', methods=['POST'])
-def process_signup():
-    data = request.form
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
-
-    # Check if the username or email is already taken
-    if User.query.filter_by(username=username).first():
-        return 'Username already exists. Please choose a different username.'
-    if User.query.filter_by(email=email).first():
-        return 'Email already exists. Please use a different email address.'
-
-    # Store the new user data in the database
-    new_user = User(username=username, email=email, password=password)
-    db.session.add(new_user)
-    db.session.commit()
-
-    # Redirect the user to the login page after successful signup
-    return redirect(url_for('login'))
-
-@app.route('/authenticate', methods=['POST'])
-def authenticate():
-    data = request.form
-    username = data.get('username')
-    password = data.get('password')
-
-    user = User.query.filter_by(username=username, password=password).first()
-
-    if user:
-        session['username'] = username
-        return redirect(url_for('dashboard'))
-    else:
-        print("Invalid credentials.")
-        return 'Invalid credentials.'
+    return render_template('homepage.html')
 
 @app.route('/dashboard')
 def dashboard():
-    if 'username' not in session:
-        return redirect(url_for('index'))
-
-    return render_template('dashboard.html', username=session['username'])
+    return render_template('dashboard.html')
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
     return redirect(url_for('index'))
 
 @app.route('/synthesize', methods=['POST'])
@@ -106,7 +54,6 @@ def synthesize():
     speech_stream.seek(0)
 
     return Response(speech_stream.read(), mimetype="audio/mp3")
-
 
 if __name__ == '__main__':
     app.run(debug=True)
