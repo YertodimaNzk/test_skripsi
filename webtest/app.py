@@ -32,9 +32,21 @@ class User(db.Model):
 def index():
     return render_template('homepage.html')
 
-@app.route('/dashboard')
+@app.route('/materi')
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('materi.html')
+
+@app.route('/indocourse')
+def indocourse():
+    return render_template('templates/indocourse.html')
+
+@app.route('/materi')
+def engcourse():
+    return render_template('materi.html')
+
+@app.route('/indocourse.html')
+def html_redirect(indocourse):
+    return redirect(url_for(indocourse))
 
 @app.route('/logout')
 def logout():

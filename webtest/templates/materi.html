@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/materi.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="homepage.html">
+                    <img class="logo" src="image/logo.png">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="materi.html" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Pilih Materimu</p>
+                <div class="container-filling">
+                    <div class="container-course">
+                        <a href="indocourse.html">
+                            <span class="container-title">Bahasa Indonesia</span>
+                        </a>
+                        <img class="voice-button" src="image/voice.png">
+                    </div>
+    
+                    <div class="container-course">
+                        <a href="engcourse.html">
+                            <span class="container-title">Bahasa Inggris</span>
+                        </a>
+                        <img class="voice-button" src="image/voice.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="script/homepage.js"></script>
+    </body>
+</html>
