@@ -9,12 +9,12 @@
     <body>
         <div class="header">
             <div class="header-left-section">
-                <a href="homepage.html">
+                <a href="{{ url_for('homepage') }}">
                     <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
                 </a>  
             </div>
             <div class="header-right-section">
-                <a href="materi.html" class="materi-link">
+                <a href="{{ url_for('materi') }}" class="materi-link">
                     <button class="materi-button">Materi</button>
                 </a>
                 <span class="greeting">Welcome!</span>
@@ -37,14 +37,14 @@
                 <p class="container-text speakable">Pilih Materimu</p>
                 <div class="container-filling">
                     <div class="container-course">
-                        <a href="{{ url_for('indocourse.html') }}">
+                        <a href="{{ url_for('indocourse') }}">
                             <span class="container-title speakable">Bahasa Indonesia</span>
                         </a>
                         <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
     
                     <div class="container-course">
-                        <a href="/engcourse.html">
+                        <a href="{{ url_for('engcourse') }}">
                             <span class="container-title speakable">Bahasa Inggris</span>
                         </a>
                         <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">

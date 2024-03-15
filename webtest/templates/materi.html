@@ -9,7 +9,7 @@
         <div class="header">
             <div class="header-left-section">
                 <a href="homepage.html">
-                    <img class="logo" src="image/logo.png">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
                 </a>
             </div>
             <div class="header-right-section">
@@ -25,17 +25,17 @@
                 <p class="container-text">Pilih Materimu</p>
                 <div class="container-filling">
                     <div class="container-course">
-                        <a href="indocourse.html">
+                        <a href="{{ url_for('indocourse') }}">
                             <span class="container-title">Bahasa Indonesia</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
     
                     <div class="container-course">
-                        <a href="engcourse.html">
+                        <a href="{{ url_for('engcourse') }}">
                             <span class="container-title">Bahasa Inggris</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
                 </div>
             </div>
