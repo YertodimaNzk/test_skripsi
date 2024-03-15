@@ -8,12 +8,12 @@
     <body>
         <div class="header">
             <div class="header-left-section">
-                <a href="homepage.html">
+                <a href="{{ url_for('homepage') }}">
                     <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
                 </a>
             </div>
             <div class="header-right-section">
-                <a href="materi.html" class="materi-link">
+                <a href="{{ url_for('materi') }}" class="materi-link">
                     <button class="materi-button">Materi</button>
                 </a>
                 <span class="greeting">Welcome!</span>

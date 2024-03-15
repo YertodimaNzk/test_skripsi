@@ -8,12 +8,12 @@
     <body>
         <div class="header">
             <div class="header-left-section">
-                <a href="homepage.html">
-                    <img class="logo" src="image/logo.png">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
                 </a>
             </div>
             <div class="header-right-section">
-                <a href="materi.html" class="materi-link">
+                <a href="{{url_for('materi')}}" class="materi-link">
                     <button class="materi-button">Materi</button>
                 </a>
                 <span class="greeting">Welcome!</span>
@@ -28,28 +28,28 @@
                         <a href="indocourse/polakalimat.html">
                             <span class="container-title">Pola Kalimat</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
     
                     <div class="container-course">
                         <a href="indocourse/jeniskalimat.html">
                             <span class="container-title">Jenis Kalimat</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
 
                     <div class="container-course">
                         <a href="indocourse/kalimatefektif.html">
                             <span class="container-title">Kalimat Efektif</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
                         
                     <div class="container-course">
                         <a href="indocourse/bentukimbuhan.html">
                             <span class="container-title">Bentuk Imbuhan</span>
                         </a>
-                        <img class="voice-button" src="image/voice.png">
+                        <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
                     </div>
                 </div>
             </div>
