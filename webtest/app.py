@@ -48,6 +48,10 @@ def indocourse():
 def engcourse():
     return render_template('engcourse.html')
 
+@app.route('/polakalimat')
+def polakalimat():
+    return render_template('polakalimat.html')
+
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
