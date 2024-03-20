@@ -40,13 +40,59 @@ def homepage():
 def materi():
     return render_template('materi.html')
 
+# ===============================================
+
 @app.route('/indocourse')
 def indocourse():
     return render_template('indocourse.html')
 
+@app.route('/polakalimat')
+def polakalimat():
+    return render_template('polakalimat.html')
+
+@app.route('/jeniskalimat')
+def jeniskalimat():
+    return render_template('jeniskalimat.html')
+
+@app.route('/kalimatefektif')
+def kalimatefektif():
+    return render_template('kalimatefektif.html')
+
+@app.route('/bentukimbuhan')
+def bentukimbuhan():
+    return render_template('bentukimbuhan.html')
+
+# =====================
+
 @app.route('/engcourse')
 def engcourse():
     return render_template('engcourse.html')
+
+@app.route('/verb')
+def verb():
+    return render_template('verb.html')
+
+@app.route('/noun')
+def noun():
+    return render_template('noun.html')
+
+@app.route('/adjective')
+def adjective():
+    return render_template('adjective.html')
+
+@app.route('/adverb')
+def adverb():
+    return render_template('adverb.html')
+
+@app.route('/pronoun')
+def pronoun():
+    return render_template('pronoun.html')
+
+@app.route('/tenses')
+def tenses():
+    return render_template('tenses.html')
+
+# ============================================
 
 @app.route('/logout')
 def logout():

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Adjective</p>
+                <p class="container-text-meaning">
+                    Adjective adalah kata sifat, dimana kata ini mendeskripsikan kata benda dengan lebih detail.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat berbagai macam adjective, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Descriptive Adjective, untuk mendeskripsikan ciri-ciri atau kondisi suatu benda.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Dry, Hot, Cold.
+                </p>
+                <p class="container-text-meaning">
+                    2. Demonstrative Adjective, untuk menunjuk posisi suatu benda.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: That, This, Those, These.
+                </p>
+                <p class="container-text-meaning">
+                    3. Distributive Adjective, untuk membagi kelompok kata benda ke dalam satu individu.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Every, Each.
+                </p>
+                <p class="container-text-meaning">
+                    4. Quantitative Adjective, untuk menunjukan jumlah suatu benda.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Few, Some, Little.
+                </p>
+                <p class="container-text-meaning">
+                    5. Comparative Adjective, untuk membandingkan dua benda atau lebih.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Younger, Older.
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>

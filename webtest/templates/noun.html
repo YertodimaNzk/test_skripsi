@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Noun</p>
+                <p class="container-text-meaning">
+                    Noun adalah kata yang digunakan untuk menggambarkan orang, benda, hewan, dan sebagainya. Noun digunakan sebagai subjek atau objek.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat berbagai macam noun, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Common Noun, yang merujuk pada orang, tempat, benda secara tidak spesifik.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Street, Teacher, Lamp.
+                </p>
+                <p class="container-text-meaning">
+                    2. Proper Noun, yang merujuk pada orang, tempat, benda secara spesifik.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Indonesia, Jakarta, Yeremia.
+                </p>
+                <p class="container-text-meaning">
+                    3. Concrete Noun, yang merujuk pada sesuatu yang dapat dirasakan oleh panca indra.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Salt, Fish, Paper.
+                </p>
+                <p class="container-text-meaning">
+                    4. Abstract Noun, yang merujuk pada sesuatu yang tidak dapat dirasakan oleh panca indra.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Experience, Love.
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>
