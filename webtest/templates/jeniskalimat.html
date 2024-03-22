@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Jenis Kalimat</p>
+                <p class="container-text-meaning">
+                    Jenis-jenis kalimat berdasarkan jumlah frasanya, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Kalimat Tunggal, yang merupakan kalimat yang terdiri dari satu klausa
+                </p>
+                <p class="container-text-meaning">
+                    2. Kalimat Majemuk, yang merupakan kalimat yang terdiri dari lebih dari satu klausa
+                </p>
+                <p class="container-text-meaning">
+                    Jenis-jenis kalimat berdasarkan isi, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Kalimat Pernyataan, yang bertujuan untuk menyampaikan informasi
+                </p>
+                <p class="container-text-meaning">
+                    2. Kaliamt Tanya, yang bertujuan untuk mencari tahu suatu informasi
+                </p>
+                <p class="container-text-meaning">
+                    3. Kalimat Seruan, yang bertujuan untuk mengungkapkan perasaan
+                </p>
+                <p class="container-text-meaning">
+                    4. Kalimat Perintah, yang bertujuan untuk memberikan perintah
+                </p>
+                <p class="container-text-meaning">
+                    5. Kalimat Pengandaian, yang bertujuan untuk menggambarkan keinginan
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>
