@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Bentuk Imbuhan</p>
+                <p class="container-text-meaning">
+                    Imbuhan adalah bunyi yang ditambahkan pada sebuah kata dasar, baik di awal, di akhir, di tengah atau gabungan di antara ketiganya untuk membentuk kata baru.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat berbagai macam imbuhan, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Imbuhan berdasarkan posisi, dimana terbagi menjadi empat, yaitu prefiks (awalan), sufiks (akhiran), infiks (sisipan) dan konfiks (gabungan awalan dan akhiran).
+                </p>
+                <p class="container-text-meaning">
+                    2. Imbuhan berdasarkan penggunaannya, dimana terbagi menjadi dua, yaitu imbuhan produktif dan imbuhan tak produktif.
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>

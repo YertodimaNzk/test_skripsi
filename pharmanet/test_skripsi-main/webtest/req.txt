@@ -1,0 +1,8 @@
+gTTS==2.5.1
+pydub==0.25.1
+pyttsx3==2.90
+Flask==2.0.1
+Flask-SQLAlchemy==2.5.1
+pywin32
+mysql-connector-python
+werkzeug==2.2.2

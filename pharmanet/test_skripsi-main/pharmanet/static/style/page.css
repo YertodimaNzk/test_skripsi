@@ -1,0 +1,21 @@
+body{
+    background-color: #EEEEEE;
+}
+
+.bg-custom {
+    background-color: #176B87;
+}
+
+.btn-custom{
+    background-color: #176B87;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.btn-custom:hover {
+    background-color: #176B87;
+}
+
+.btn-custom-mic{
+    background-color: #EEEEEE;
+}

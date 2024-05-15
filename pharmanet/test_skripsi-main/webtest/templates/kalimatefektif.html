@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Kalimat Efektif</p>
+                <p class="container-text-meaning">
+                    Syarat kalimat efektif adalah sebagai berikut
+                </p>
+                <p class="container-text-meaning">
+                    1. Kelogisan
+                </p>
+                <p class="container-text-meaning">
+                    2. Ketegasan
+                </p>
+                <p class="container-text-meaning">
+                    3. Kehematan 
+                </p>
+                <p class="container-text-meaning">
+                    4. Ketepatan
+                </p>
+                <p class="container-text-meaning">
+                    5. Kecermatan
+                </p>
+                <p class="container-text-meaning">
+                    6. Kepaduan
+                </p>
+                <p class="container-text-meaning">
+                    7. Kesejajaran
+                </p>
+                <p class="container-text-meaning">
+                    8. Kepadanan
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>

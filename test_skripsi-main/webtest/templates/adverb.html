@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Adverb</p>
+                <p class="container-text-meaning">
+                    Adverb adalah kata yang digunakan untuk memodifikasi klausa, kata kerja,kata sifat, dan kata keterangan.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat berbagai macam adverb, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Adverb of Manner, untuk memberikan keterangan terkait terjadinya suatu
+                    hal.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Fast, Slow, Better.
+                </p>
+                <p class="container-text-meaning">
+                    2. Adverb of Degree, untuk memberikan keterangan terkait intensitas tindakan.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Very, Hardly, Just.
+                </p>
+                <p class="container-text-meaning">
+                    3. Adverb of Frequency, untuk memberikan keterangan terkait seberapa sering peristiwa terjadi.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Always, Never.
+                </p>
+                <p class="container-text-meaning">
+                    4. Adverb of Time, untuk memberikan keterangan terkait kapan terjadinya suatu peristiwa.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Sometimes, Soon, Then.
+                </p>
+                <p class="container-text-meaning">
+                    5. Adverb of Place, untuk memberikan keterangan terkait tempat terjadinya suatu peristiwa.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Down, Below, Here.
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>
