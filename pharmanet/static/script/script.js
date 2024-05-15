@@ -47,3 +47,15 @@ recognition.onresult = function(event) {
 function startSpeechRecognition() {
     recognition.start();
 }
+// Fungsi untuk Search Data lalu menampilkan result page
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+    try {
+        var searchInputValue = document.getElementById('searchInput').value.trim();
+        if (searchInputValue === '') {
+            throw new Error('Search input is empty');
+        }
+    } catch (error) {
+        event.preventDefault();
+        console.error(error.message);
+    }
+});
