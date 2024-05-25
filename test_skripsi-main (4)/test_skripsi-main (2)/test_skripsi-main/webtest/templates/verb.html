@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Verb</p>
+                <p class="container-text-meaning">
+                    Verb adalah kata kerja. Verb digunakan untuk merujuk pada tindakan yang dilakukan oleh seseorang atau sesuatu pada suatu keadaan.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat berbagai macam verb, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Action Verb, digunakan untuk mendeskripsikan tindakan.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Run, Walk, Read, Write.
+                </p>
+                <p class="container-text-meaning">
+                    2. Regular Verb, digunakan untuk perubahan dari Verb 1 ke Verb 2 atau Verb 3 yang sifatnya beraturan.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Walked, Stopped, Started.
+                </p>
+                <p class="container-text-meaning">
+                    3. Irregular Verb, digunakan untuk perubahan dari Verb 1 ke Verb 2 atau Verb 3 yang sifatnya tidak beraturan.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Written, Read.
+                </p>
+                <p class="container-text-meaning">
+                    4. Auxiliary Verb, digunakan untuk memperjelas kata kerja utama.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: am, is, are, was, were, been, can, shall.
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>
