@@ -19,7 +19,17 @@ def index():
 # Route untuk halaman result-page
 @app.route('/result-page')
 def resultpage():
-    return render_template('result-page.html')
+    query = request.args.get('query')
+    if query:
+        result = searchDiseaseByName(query)
+        if result:
+            disease_name = result['name']
+            disease_description = result['description']
+        else:
+            disease_name = 'Penyakit tidak ditemukan'
+            disease_description = ''
+        return render_template('result-page.html', disease_name=disease_name, disease_description=disease_description)
+    return render_template('result-page.html', disease_name=None, disease_description=None)
 
 # Route untuk halaman about us for user
 @app.route('/aboutUsForUser')
@@ -95,7 +105,6 @@ def adminKeywordBank():
     cursor.close()
     return render_template('data_admin/adminKeywordBank.html', keyword_bank_data=keyword_bank_data)
 
-
 # Route untuk halaman create disease dengan method POST untuk menyimpan data
 @app.route('/createDisease', methods=['GET', 'POST'])
 def adminCreateDisease():
@@ -164,7 +173,6 @@ def adminCreateKeywordBank():
     keywordbank_data = cursor.fetchall()
     cursor.close()
     return render_template('data_admin/createKeywordBank.html', keywordbank_data=keywordbank_data)
-
 
 # Route untuk halaman create about us
 @app.route('/createAboutUs')

@@ -24,9 +24,9 @@
     <h2 class="title">Pharmadia - Layanan Kesehatan</h2>
 
     <div class="form-for-search-container">
-        <form class="form-for-search">
+        <form class="form-for-search" onsubmit="return false;">
             <input id="diseaseInput" class="form-for-input" type="search" placeholder="Ketik untuk mencari informasi kesehatan">
-            <button class="button-for-search" onclick="startSpeechRecognition()" id="micButton">
+            <button type="button" class="button-for-search" onclick="startSpeechRecognition()" id="micButton">
                 <img src="{{ url_for('static', filename='images/mic.png') }}" class="mic-img" alt="Mic">
             </button>
         </form>

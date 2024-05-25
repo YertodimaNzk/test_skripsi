@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style/page.css') }}">
 
-    <title>Pharmacy</title>
+    <title>Pharmadia - Layanan Kesehatan</title>
 </head>
 <body>
     <div class="container-for-navbar">
@@ -24,46 +24,37 @@
     <h2 class="title">Pharmadia - Layanan Kesehatan</h2>
 
     <div class="form-for-search-container">
-        <form class="form-for-search">
+        <form class="form-for-search" onsubmit="event.preventDefault(); searchDisease();">
             <input id="diseaseInput" class="form-for-input" type="search" placeholder="Ketik untuk mencari informasi kesehatan">
-            <button class="button-for-search" onclick="startSpeechRecognition()" id="micButton">
+            <button type="button" class="button-for-search" onclick="startSpeechRecognition()" id="micButton">
                 <img src="{{ url_for('static', filename='images/mic.png') }}" class="mic-img" alt="Mic">
             </button>
         </form>
     </div>
 
     <div class="container-for-resultpage">
-        <div id="searchResult" class="result"></div>
+        <div id="searchResult" class="result">
+            {% if disease_name %}
+                <strong>{{ disease_name }}</strong>: {{ disease_description }}
+            {% else %}
+                <p>Tidak ada hasil pencarian</p>
+            {% endif %}
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 
     <script>
+        // Mendapatkan parameter query dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('query');
 
-        // Fungsi untuk melakukan pencarian penyakit berdasarkan nama
-        function searchDiseaseByName(query) {
-            query = query.toLowerCase().trim();
-            // Cari penyakit berdasarkan nama (exact match)
-            return diseases.find(disease => disease.name.toLowerCase() === query);
-        }
-
-        // Melakukan pencarian berdasarkan query
-        function performSearch() {
-            if (query !== null && query !== '') {
-                var result = searchDiseaseByName(query);
-                if (result) {
-                    displaySearchResult(result.name, result.description);
-                } else {
-                    displaySearchResult('Penyakit tidak ditemukan', '');
-                }
-            }
-        }
-
-        // Memanggil fungsi pencarian saat halaman dimuat
+        // Memanggil fungsi pencarian saat halaman dimuat jika ada query
         window.onload = function() {
-            performSearch();
+            if (query) {
+                document.getElementById('diseaseInput').value = query;
+                searchDisease();
+            }
         };
     </script>
 

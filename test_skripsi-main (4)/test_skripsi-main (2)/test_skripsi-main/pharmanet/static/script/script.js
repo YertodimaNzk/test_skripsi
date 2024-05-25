@@ -25,9 +25,11 @@ function searchDisease() {
         }
     }
 }
-// Untuk menampilkan hasil pencarian menggunakan enter
+
+// Fungsi untuk menampilkan hasil pencarian menggunakan enter
 document.getElementById("diseaseInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
+        event.preventDefault();
         searchDisease();
     }
 });
@@ -36,13 +38,13 @@ document.getElementById("diseaseInput").addEventListener("keypress", function(ev
 function displaySearchResult(name, description) {
     var resultDiv = document.getElementById('searchResult');
     resultDiv.innerHTML = `<strong>${name}</strong>: ${description}`;
+    window.location.href = "/result-page?query=" + encodeURIComponent(name);
 }
 
-
-// optimazation speech recognition 
+// optimasi speech recognition 
 function startListening(){
-    const recognition = new(window.SpeechRecognition|| window.webkitSpeechRecognition)();
-    recognition.lang= 'id_ID';
+    const recognition = new(window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'id-ID';
     recognition.start();
 
     recognition.onresult = function(event) {
@@ -50,22 +52,10 @@ function startListening(){
         document.getElementById('diseaseInput').value = result;
         console.log('Speech Recognition:', result);
         searchDisease(); 
-}
+    }
 }
 
 // Inisialisasi recognition object untuk speech-to-text
-//var recognition = new webkitSpeechRecognition() || new SpeechRecognition();
-//recognition.lang = 'id-ID'; // Bahasa Indonesia, sesuaikan jika diperlukan
-
-// Event listener untuk hasil speech recognition
-// recognition.onresult = function(event) {
-//     var result = event.results[0][0].transcript;
-//     document.getElementById('diseaseInput').value = result;
-//     console.log('Speech Recognition:', result);
-//     searchDisease(); // Memanggil fungsi pencarian dengan hasil speech recognition
-// }
-
-// Fungsi untuk memulai speech recognition
 function startSpeechRecognition() {
     startListening();
 }
