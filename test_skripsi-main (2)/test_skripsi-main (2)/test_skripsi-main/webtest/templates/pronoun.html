@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Pronoun<p class="container-text-meaning">
+                    Pronoun biasanya digunakan untuk merujuk pada kata benda yang dipakai sebelumnya.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat berbagai macam pronoun, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Personal Pronoun, merupakan kata ganti subjek atau objek yang merujuk pada orang atau penamaan.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh:
+                </p>
+                <p class="container-text-meaning">
+                    I - Me, You - You, We - Us, They - Them, She - Her, He - Him, It - It.
+                </p>
+                <p class="container-text-meaning">
+                    2. Reflexive Pronoun, merupakan kata ganti yang dilakukan oleh diri sendiri.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Myself, Herself, Herself.
+                </p>
+                <p class="container-text-meaning">
+                    3. Possesive Pronoun, merupakan kata ganti  yang merujuk pada kepunyaan.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: My, Your, Her, His.
+                </p>
+                <p class="container-text-meaning">
+                    4. Reciprocal Pronoun, merupakan kata ganti ketika dua orang atau lebih melakukan hal yang sama.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Each other.
+                </p>
+                <p class="container-text-meaning">
+                    5. Indefinite Pronoun, merupakan kata ganti untuk menggantikan sesuatu tanpa mengatakan siapa mereka sebenarnya.
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: -body (everybody, anybody), -one (everyone, anyone).
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,475 @@
+body {
+    background-color: #EEEEEE;
+    font-family: "Open Sans", sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+.container-for-navbar {
+    display: flex;
+    justify-content: end;
+}
+
+.container-for-navbar-for-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 600;
+}
+
+.title {
+    margin-top: 3vh;
+    text-align: center;
+}
+
+.form-for-search-container {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+    margin-bottom: 3vh;
+}
+
+.form-for-search {
+    background-color: #176B87;
+    border-radius: 6px;
+    padding: 16px 10px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-for-input {
+    width: 100%;
+    max-width: 600px;
+    padding: 6px 10px; /* Mengurangi padding untuk memendekkan input */
+    border: none;
+    border-radius: 25px;
+    box-sizing: border-box;
+    font-size: 16px;
+    height: 36px; /* Atur tinggi input */
+}
+
+.button-for-search {
+    border: none;
+    border-radius: 25px;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Hapus padding pada tombol */
+}
+
+.mic-img {
+    width: 24px; /* Ukuran gambar tetap */
+    height: 24px; /* Ukuran gambar tetap */
+    background-color: #EEEEEE;
+    padding: 5px; /* Padding gambar tetap */
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.carousel-container {
+    position: relative;
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.carousel-inner {
+    display: flex;
+    overflow: hidden;
+}
+
+.carousel-item {
+    min-width: 100%;
+    transition: transform 0.5s ease;
+}
+
+.carousel-item img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.prev-slide, .next-slide {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -30px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background-color: transparent;
+    border: none;
+}
+
+.next-slide {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev-slide {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev-slide:hover, .next-slide:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Result Page */
+.container-for-resultpage{
+    margin: 0 auto;
+    width: 81%;
+    height: 330px;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+}
+
+.result{
+    padding: 10px;
+}
+
+/* Login Page */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    margin-top: 20vh;
+    width: 100%;
+    max-width: 600px; /* Lebar maksimum diubah menjadi 600px */
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group-for-login {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.form-label-for-login {
+    display: block;
+    margin-bottom: 5px;
+    color: #555555;
+    font-weight: 600;
+}
+
+.form-input-for-login {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.button-for-login {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #FFFFFF;
+    background-color: #176B87;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Feedback Page */
+.feedback-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.feedback-container {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group-for-feedback {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.form-label-for-feedback {
+    display: block;
+    margin-bottom: 5px;
+    color: #555555;
+    font-weight: 600;
+}
+
+.form-input-for-feedback, .form-control-for-feedback {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+textarea.form-control-for-feedback {
+    resize: none;
+}
+
+.button-for-feedback {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #FFFFFF;
+    background-color: #176B87;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* About Us */
+.aboutus-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.aboutus-content {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 800px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.aboutus-text {
+    margin: 0 0 10px;
+}
+
+/* Admin */
+.admin-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-content{
+    display: flex;
+    justify-content: center;
+    background-color: #176B87;
+    width: 100%;
+    height: 5vh;
+}
+
+.admin-button{
+    background-color: #176B87;
+    color: #FFFFFF;
+    border: none;
+    margin: 5px;
+}
+
+.admin-button a{
+    font-size: 15px;
+    color: #FFFFFF;
+}
+
+/* Data admin */
+.data-admin-content{
+    display: flex;
+    justify-content: center;
+}
+
+.data-admin-button{
+    border: none;
+    border-radius: 5px;
+    background-color: #176B87;
+    padding: 10px;
+    margin-bottom: 25px;
+}
+
+.data-admin-button a{
+    color: #FFFFFF;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.table th,
+.table td {
+    text-align: start;
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+    background-color: #f8f9fa;
+}
+
+.table td {
+    background-color: #fff;
+}
+
+.data-admin-btn {
+    background-color: #176B87;
+    color: #fff;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+}
+
+.data-admin-btn a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.data-admin-btn a:hover {
+    text-decoration: none;
+}
+
+/* create page */
+
+.create-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.create-page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.form-group-create-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-label-create-page {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-control-create-page {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.button-create-page {
+    display: flex;
+    justify-content: center;
+}
+
+.button-create-page button {
+    padding: 0.75rem 1.5rem;
+    background-color: #176B87;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000; 
+    display: none;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+#modal-form {
+    display: none;
+}
+
+#modal-form.show {
+    display: block;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}

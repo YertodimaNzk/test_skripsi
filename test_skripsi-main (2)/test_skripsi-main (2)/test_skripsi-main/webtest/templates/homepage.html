@@ -1,0 +1,55 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/homepage.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>  
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="image">
+                <div class="overlay">
+                    <p class="content-text">Melangkah ke Masa Depan: Belajar dengan Suara</p>
+                    <h1 class="content-title">Learn With Us</h1>
+                    <button class="content-button">Pilih Materimu Sekarang!</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text speakable">Pilih Materimu</p>
+                <div class="container-filling">
+                    <div class="container-course">
+                        <a href="{{ url_for('indocourse') }}">
+                            <span class="container-title speakable">Bahasa Indonesia</span>
+                        </a>
+                    </div>
+    
+                    <div class="container-course">
+                        <a href="{{ url_for('engcourse') }}">
+                            <span class="container-title speakable">Bahasa Inggris</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="{{ url_for('static', filename='scrip/homepage.js') }}"></script>
+  </body>
+  </html>
