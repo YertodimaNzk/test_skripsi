@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Tenses</p>
+                <p class="container-text-meaning">
+                    Tenses adalah bentuk kata kerja yang menunjukan kapan suatu peristiwa terjadi, baik di masa lampau, sekarang, maupun yang akan datang.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat 16 jenis tenses, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Simple Present Tense, yang menyatakan aktivitas sehari-hari, umum, dan fakta.
+                </p>
+                <p class="container-text-meaning">
+                    2. Present Continuous Tense, yang menyatakan peristiwa yang sedang berlangsung.
+                </p>
+                <p class="container-text-meaning">
+                    3. Present Perfect Tense, yang menyatakan peristiwa yang telah terjadi dan memiliki pengaruh di masa sekarang.
+                </p>
+                <p class="container-text-meaning">
+                    4. Present Perfect Continuous Tense, yang menyatakan peristiwa yang terjadi di masa lalu dan berlanjut hingga saat ini.
+                </p>
+                <p class="container-text-meaning">
+                    5. Simple Past Tense, yang menyatakan peristiwa yang terjadi di masa lampau yang sudah tidak terjadi hari ini.
+                </p>
+                <p class="container-text-meaning">
+                    6. Past Continuous Tense, yang menyatakan peristiwa yang telah terjadi di masa lampau.
+                </p>
+                <p class="container-text-meaning">
+                    7. Past Perfect Tense, yang menyatakan peristiwa yang terjadi sebelum suatu tindakan selesai di masa lampau.
+                </p>
+                <p class="container-text-meaning">
+                    8. Past Perfect Continuous Tense, yang menyatakan peristiwa yang dimulai di masa lampau yang berlanjut ke tindakan lain.
+                </p>
+                <p class="container-text-meaning">
+                    9. Simple Future Tense, yang menyatakan peristiwa yang akan terjadi di masa yang akan datang.
+                </p>
+                <p class="container-text-meaning">
+                    10. Future Continuous Tense, yang menyatakan peristiwa yang sedang berlangsung yang akan terjadi di masa yang akan datang.
+                </p>
+                <p class="container-text-meaning">
+                    11. Future Perfect Tense, yang menyatakan peristiwa yang akan diselesaikan sekarang atau di masa yang akan datang.
+                </p>
+                <p class="container-text-meaning">
+                    12. Future Perfect Continuous Tense, yang menyatakan peristiwa yang berfokus pada tindakan sebelum waktu tertentu di masa yang akan datang.
+                </p>
+                <p class="container-text-meaning">
+                    13. Past Future Tense, yang menyatakan peristiwa di masa yang akan datang yang terjadi setelah suatu peristiwa tertentu di masa lampau.
+                </p>
+                <p class="container-text-meaning">
+                    14. Past Future Continuous Tense, yang berfokus pada peristiwa sebelum waktu tertentu di masa yang akan datang.
+                </p>
+                <p class="container-text-meaning">
+                    15. Past Future Perfect Tense, yang menggambarkan peristiwa yang akan selesai pada suatu titik di masa lampau.
+                </p>
+                <p class="container-text-meaning">
+                    16. Past Future Perfect Continuous Tense, yang menyatakan peristiwa yang akan terus berlangsung di masa lampau.
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>

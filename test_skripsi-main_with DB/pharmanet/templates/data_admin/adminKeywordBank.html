@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Figtree:ital,wght@0,300..900;1,300..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/page.css') }}">
+
+    <title>Admin - Penampung Kata Kunci</title>
+</head>
+<body>
+    <div class="container-for-navbar">
+        <ul>
+            <li><a href="/">Back to Home</a></li>
+            <li><a href="/aboutUsForUser">Tentang Kami</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+            {% if 'user_id' in session %}
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login (for admin only)</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="admin-container">
+        <h2 class="title">Admin</h2>
+        <div class="admin-content">
+            <button class="admin-button"><a href="/authorization">Autorisasi</a></button>
+            <button class="admin-button"><a href="/disease">Penyakit</a></button>
+            <button class="admin-button"><a href="/keyword">Kata kunci</a></button>
+            <button class="admin-button"><a href="/slideFact">Slide Fakta</a></button>
+            <button class="admin-button"><a href="/keywordBank">Penampung Kata Kunci</a></button>
+        </div>
+        <div id="admin-content-placeholder"></div>
+    </div>
+
+    <div class="data-admin-container">
+        <h2 class="title">Penampung Kata Kunci</h2>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:350px">Penampung Kata Kunci</th>
+                        <th scope="col" style="width:150px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for keywordbank in keyword_bank_data %}
+                        <tr>
+                            <td>{{ keywordbank.keywordbank_nama }}</td>
+                            <td><button class="data-admin-btn" onclick="deleteKeyword(this)">Hapus</button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+
+    <script>
+        function deleteKeyword(button) {
+            const row = button.closest('tr');
+            const keywordId = row.getAttribute('data-id');
+
+            fetch('/deleteKeywordBank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: keywordId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    row.remove();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

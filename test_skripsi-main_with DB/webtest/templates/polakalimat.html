@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learn With Us</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/course.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <div class="header-left-section">
+                <a href="{{ url_for('homepage') }}">
+                    <img class="logo" src="{{ url_for('static', filename='image/logo.png') }}">
+                </a>
+            </div>
+            <div class="header-right-section">
+                <a href="{{ url_for('materi') }}" class="materi-link">
+                    <button class="materi-button">Materi</button>
+                </a>
+                <span class="greeting">Welcome!</span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-container">
+                <p class="container-text">Pola Kalimat</p>
+                <p class="container-text-meaning">
+                    Kalimat dasar adalah kalimat yang memiliki unsur pelengkap (Subjek, Predikat, Objek, Pelengkap, dan Keterangan) yang memiliki pola urutan umum.
+                </p>
+                <p class="container-text-meaning">
+                    Terdapat beberapa contoh pola kalimat dasar, yaitu:
+                </p>
+                <p class="container-text-meaning">
+                    1. Subjek - Predikat
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya membaca
+                </p>
+                <p class="container-text-meaning">
+                    2. Subjek - Predikat - Objek
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya membaca buku
+                </p>
+                <p class="container-text-meaning">
+                    3. Subjek - Predikat - Pelengkap
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya berbelanja buku
+                </p>
+                <p class="container-text-meaning">
+                    4. Subjek - Predikat - Keterangan
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya berbelanja kemarin
+                </p>
+                <p class="container-text-meaning">
+                    5. Subjek - Predikat - Objek - Pelengkap
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya memberikan adiknya mainan
+                </p>
+                <p class="container-text-meaning">
+                    6. Subjek - Predikat - Objek - Keterangan
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya membeli buku kemarin
+                </p>
+                <p class="container-text-meaning">
+                    7. Subjek - Predikat - Pelengkap - Keterangan
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya berbelanja buku kemarin
+                </p>
+                <p class="container-text-meaning">
+                    8. Subjek - Predikat - Objek - Pelengkap - Keterangan
+                </p>
+                <p class="container-text-meaning">
+                    Contoh: Saya memberikan adiknya mainan kemarin
+                </p>
+                <img class="voice-button" src="{{ url_for('static', filename='image/voice.png') }}">
+            </div>
+        </div>
+    </body>
+</html>

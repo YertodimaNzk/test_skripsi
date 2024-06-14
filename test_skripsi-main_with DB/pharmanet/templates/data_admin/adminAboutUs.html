@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Figtree:ital,wght@0,300..900;1,300..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/page.css') }}">
+
+    <title>Admin - Autorisasi</title>
+</head>
+<body>
+    <div class="container-for-navbar">
+        <ul>
+            <li><a href="/">Back to Home</a></li>
+            <li><a href="/aboutUsForUser">Tentang Kami</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+            {% if 'user_id' in session %}
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login (for admin only)</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="admin-container">
+        <h2 class="title">Admin</h2>
+        <div class="admin-content">
+            <button class="admin-button"><a href="/authorization">Autorisasi</a></button>
+            <button class="admin-button"><a href="/disease">Penyakit</a></button>
+            <button class="admin-button"><a href="/keyword">Kata kunci</a></button>
+            <button class="admin-button"><a href="/aboutUsForAdmin">Tentang Kami</a></button>
+            <button class="admin-button"><a href="/slideFact">Slide Fakta</a></button>
+            <button class="admin-button"><a href="/keywordBank">Penampung Kata Kunci</a></button>
+        </div>
+        <div id="admin-content-placeholder"></div>
+    </div>
+
+    <div class="data-admin-container">
+        <h2 class="title">Tentang Kami</h2>
+        <div class="data-admin-content">
+            <button class="data-admin-button"><a href="/createAuthorization-copy">Buat Tentang Kami Baru</a></button>
+        </div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:400px">Deskripsi</th>
+                        <th scope="col" style="width:350px">Nama</th>
+                        <th scope="col" style="width:350px">Nomor Telepon</th>
+                        <th scope="col" style="width:350px">Sosial Media</th>
+                        <th scope="col" style="width:350px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for auth in authorization_data %}
+                    <tr>
+                        <td class="editable">{{ auth.username }}</td>
+                        <td class="editable">{{ auth.password }}</td>
+                        <td>
+                            <button class="data-admin-btn edit-btn" onclick="editRow(this.parentNode.parentNode)">Edit</button>
+                            <button class="data-admin-btn delete-btn" data-id="{{ auth.auth_id }}" onclick="confirmDelete(this.parentNode.parentNode)">Hapus</button>
+                            <button class="data-admin-btn save-btn" style="display:none" onclick="saveRow(this.parentNode.parentNode, '{{ auth.auth_id }}')">Simpan</button>
+                            <button class="data-admin-btn cancel-btn" style="display:none" onclick="cancelEdit(this.parentNode.parentNode)">Batal</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+        
+    <script>
+        function editRow(row) {
+            var cells = row.getElementsByTagName('td');
+            for (var i = 0; i < cells.length - 1; i++) {
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.value = cells[i].innerText;
+                cells[i].innerText = '';
+                cells[i].appendChild(input);
+            }
+            row.querySelector('.edit-btn').style.display = 'none';
+            row.querySelector('.save-btn').style.display = 'inline-block';
+            row.querySelector('.cancel-btn').style.display = 'inline-block';
+        }
+
+        function saveRow(row, id) {
+        var cells = row.getElementsByTagName('td');
+        var updatedData = [];
+            for (var i = 0; i < cells.length - 1; i++) {
+                updatedData.push(cells[i].querySelector('input').value);
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    if (response.status === 'success') {
+                        for (var i = 0; i < cells.length - 1; i++) {
+                            cells[i].innerText = updatedData[i];
+                        }
+                        row.querySelector('.edit-btn').style.display = 'inline-block';
+                        row.querySelector('.save-btn').style.display = 'none';
+                        row.querySelector('.cancel-btn').style.display = 'none';
+                    } else {
+                        alert('Gagal mengupdate data: ' + response.message);
+                    }
+                }
+            };
+            xhttp.open("POST", "/updateAuthorization", true);
+            xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhttp.send(JSON.stringify({
+                id: id,
+                username: updatedData[0],
+                password: updatedData[1] 
+            }));
+        }
+
+        function cancelEdit(row) {
+            var cells = row.getElementsByTagName('td');
+            for (var i = 0; i < cells.length - 1; i++) {
+                var input = cells[i].getElementsByTagName('input')[0];
+                cells[i].innerText = input.value;
+            }
+            row.querySelector('.edit-btn').style.display = 'inline-block';
+            row.querySelector('.save-btn').style.display = 'none';
+            row.querySelector('.cancel-btn').style.display = 'none';
+        }
+
+        function confirmDelete(row) {
+            if (confirm('Apakah Anda yakin ingin menghapus data?')) {
+                deleteRow(row);
+            }
+        }
+
+        function deleteRow(row) {
+            row.remove();
+            var id = row.querySelector('.delete-btn').getAttribute('data-id'); // Retrieve auth_id
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    if (response.status === 'success') {
+                        alert('Data berhasil dihapus.');
+                    } else {
+                        alert('Gagal menghapus data: ' + response.message);
+                    }
+                }
+            };
+            xhttp.open("POST", "/deleteAuthorization", true);
+            xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhttp.send(JSON.stringify({ id: id }));
+        }
+    </script>
+</body>
+</html>
