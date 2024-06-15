@@ -1,0 +1,12 @@
+{
+    "anemia": {
+        "description": "Anemia is a condition in which you lack enough healthy red blood cells to carry adequate oxygen to your body's tissues.",
+        "treatment": "Treatment for anemia depends on the cause.",
+        "medication": "Iron supplements, Vitamin B12 injections, and Folic acid supplements."
+    },
+    "diabetes": {
+        "description": "Diabetes is a disease that occurs when your blood glucose, also called blood sugar, is too high.",
+        "treatment": "Healthy eating, regular exercise, and blood sugar monitoring.",
+        "medication": "Insulin therapy, Metformin, and other oral medications."
+    }
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmadia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Pharmadia</h1>
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search for a disease...">
+            <button id="mic-button">🎤</button>
+        </div>
+    </div>
+
+    <div id="listening-popup" class="hidden">Listening...</div>
+
+    <div id="result" class="hidden">
+        <h2 id="disease-name"></h2>
+        <h3>Description</h3>
+        <p id="description"></p>
+        <h3>Treatment</h3>
+        <p id="treatment"></p>
+        <h3>Medication</h3>
+        <p id="medication"></p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
