@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Figtree:ital,wght@0,300..900;1,300..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/page.css') }}">
+
+    <title>Admin - Tentang Kami</title>
+</head>
+<body>
+    <div class="container-for-navbar">
+        <ul>
+            <li><a href="/">Halaman Utama</a></li>
+            <li><a href="/aboutUsForUser">Tentang Kami</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+            {% if 'user_id' in session %}
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="/logout">Keluar</a></li>
+            {% else %}
+            <li><a href="/login">Masuk (untuk admin)</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="admin-container">
+        <h2 class="title">Admin</h2>
+        <div class="admin-content">
+            <button class="admin-button"><a href="/authorization">Autorisasi</a></button>
+            <button class="admin-button"><a href="/disease">Penyakit</a></button>
+            <button class="admin-button"><a href="/keyword">Kata kunci</a></button>
+            <button class="admin-button"><a href="/keywordBank">Penampung Kata Kunci</a></button>
+            <button class="admin-button"><a href="/aboutUs">Tentang Kami</a></button>
+        </div>
+        <div id="admin-content-placeholder"></div>
+    </div>
+
+    <div class="data-admin-container">
+        <h2 class="title">Tentang Kami</h2>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:400px">Deskripsi</th>
+                        <th scope="col" style="width:350px">Nama</th>
+                        <th scope="col" style="width:350px">Nomor Telepon</th>
+                        <th scope="col" style="width:350px">Sosial Media</th>
+                        <th scope="col" style="width:350px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ aboutus_data.deskripsi }}</td>
+                        <td>{{ aboutus_data.nama }}</td>
+                        <td>{{ aboutus_data.no_telephone }}</td>
+                        <td>{{ aboutus_data.sosial_media }}</td>
+                        <td>
+                            <button class="data-admin-btn edit-btn" onclick="editRow(this.parentNode.parentNode)">Edit</button>
+                            <button class="data-admin-btn save-btn" style="display:none" onclick="saveRow(this.parentNode.parentNode)">Simpan</button>
+                            <button class="data-admin-btn cancel-btn" style="display:none" onclick="cancelEdit(this.parentNode.parentNode)">Batal</button>
+                            <button class="data-admin-btn delete-btn" onclick="confirmDelete(this.parentNode.parentNode)">Hapus</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+    
+    <script>
+        function editRow(row) {
+            var cells = row.getElementsByTagName('td');
+            for (var i = 0; i < cells.length - 1; i++) {
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.value = cells[i].innerText;
+                cells[i].innerText = '';
+                cells[i].appendChild(input);
+            }
+            row.querySelector('.edit-btn').style.display = 'none';
+            row.querySelector('.delete-btn').style.display = 'none';
+            row.querySelector('.save-btn').style.display = 'inline-block';
+            row.querySelector('.cancel-btn').style.display = 'inline-block';
+
+            var inputs = row.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.addEventListener('keyup', function(event) {
+                    if (event.keyCode === 13) { 
+                        event.preventDefault(); 
+                        saveRow(row);
+                    }
+                });
+            });
+        }
+
+        function saveRow(row) {
+            var cells = row.getElementsByTagName('td');
+            var updatedData = [];
+            for (var i = 0; i < cells.length - 1; i++) {
+                updatedData.push(cells[i].getElementsByTagName('input')[0].value);
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    console.log("Response received: ", this.responseText); // Log response
+                    if (this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        if (response.status === 'success') {
+                            for (var i = 0; i < cells.length - 1; i++) {
+                                cells[i].innerText = updatedData[i];
+                            }
+                            row.querySelector('.edit-btn').style.display = 'inline-block';
+                            row.querySelector('.delete-btn').style.display = 'inline-block';
+                            row.querySelector('.save-btn').style.display = 'none';
+                            row.querySelector('.cancel-btn').style.display = 'none';
+                        } else {
+                            alert('Gagal mengupdate data: ' + response.message);
+                        }
+                    } else {
+                        alert('Gagal mengupdate data. Error code: ' + this.status);
+                    }
+                }
+            };
+            xhttp.open("POST", "/updateAboutUs", true);
+            xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhttp.send(JSON.stringify({
+                deskripsi: updatedData[0],
+                nama: updatedData[1],
+                no_telephone: updatedData[2],
+                sosial_media: updatedData[3]
+            }));
+        }
+
+        function cancelEdit(row) {
+            var cells = row.getElementsByTagName('td');
+            for (var i = 0; i < cells.length - 1; i++) {
+                var input = cells[i].getElementsByTagName('input')[0];
+                cells[i].innerText = input.value;
+            }
+            row.querySelector('.edit-btn').style.display = 'inline-block';
+            row.querySelector('.delete-btn').style.display = 'inline-block';
+            row.querySelector('.save-btn').style.display = 'none';
+            row.querySelector('.cancel-btn').style.display = 'none';
+        }
+
+        function confirmDelete(row) {
+            if (confirm('Are you sure you want to delete this entry?')) {
+                deleteRow(row);
+            }
+        }
+
+        function deleteRow(row) {
+            fetch(`/deleteAboutUs`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    row.remove();
+                } else {
+                    alert('Failed to delete data.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
