@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Figtree:ital,wght@0,300..900;1,300..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
+
+    <title>Admin - Penampung Kata Kunci</title>
+</head>
+<body>
+    <div class="container-for-navbar">
+        <ul>
+            <li><a href="/">Halaman Utama</a></li>
+            <li><a href="/aboutUsForUser">Tentang Kami</a></li>
+            <li><a href="/feedback">Feedback</a></li>
+            {% if 'user_id' in session %}
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="/logout">Keluar</a></li>
+            {% else %}
+            <li><a href="/login">Masuk (untuk admin)</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="admin-container">
+        <h2 class="title">Admin</h2>
+        <div class="admin-content">
+            <button class="admin-button"><a href="/authorization">Autorisasi</a></button>
+            <button class="admin-button"><a href="/disease">Penyakit</a></button>
+            <button class="admin-button"><a href="/keyword">Kata kunci</a></button>
+            <button class="admin-button"><a href="/keywordBank">Penampung Kata Kunci</a></button>
+            <button class="admin-button"><a href="/aboutUs">Tentang Kami</a></button>
+        </div>
+        <div id="admin-content-placeholder"></div>
+    </div>
+
+    <div class="data-admin-container">
+        <h2 class="title">Penampung Kata Kunci</h2>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:350px">Penampung Kata Kunci</th>
+                        <th scope="col" style="width:150px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% block content %}
+                {% for keyword in keyword_bank_data %}
+                    <tr>
+                        <td>{{ keyword.keywordbank_nama }}</td>
+                        <td>
+                            <button class="data-admin-btn" onclick="moveToKeyword(this)">Pindahkan ke Keyword</button>
+                            <button class="data-admin-btn" onclick="deleteKeyword(this)">Hapus</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% endblock %}
+            </table>
+        </div>
+
+        <div id="modal-form" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFormModal()">&times;</span>
+                <h2>Pindahkan ke Keyword</h2>
+                <form id="move-to-keyword-form">
+                    <div class="form-group-create-page">
+                        <label for="keyword_nama" class="form-label-create-page">Kata Kunci</label>
+                        <textarea class="form-control-create-page" id="keyword_nama" name="keyword_nama" rows="5" placeholder="Masukkan Kata Kunci" required></textarea>
+                    </div>
+                    <label for="penyakit">Penyakit:</label><br />
+                    <select class="form-control-create-page" id="penyakit_id" name="penyakit_id" required>
+                        <option value="">Pilih Penyakit</option>
+                        {% for penyakit in penyakit_data %}
+                        <option value="{{ penyakit.penyakit_id }}">{{ penyakit.penyakit_nama }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="button-create-page">
+                        <button type="submit" class="button-create-page">Pindahkan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    
+    <script src="{{ url_for('static', filename='script/script.js') }}"></script>
+
+    <script>
+        function deleteKeyword(button) {
+            const row = button.closest('tr');
+            const keywordId = row.getAttribute('data-id');
+
+            fetch('/deleteKeywordBank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: keywordId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    row.remove(); 
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function openFormModal() {
+            const modal = document.getElementById("modal-form");
+            modal.classList.add("show");
+
+            modal.style.top = `${(window.innerHeight - modal.offsetHeight) / 2}px`;
+            modal.style.left = `${(window.innerWidth - modal.offsetWidth) / 2}px`;
+
+            modal.querySelector("input").focus();
+        }
+
+        function closeFormModal() {
+            document.getElementById("modal-form").classList.remove("show");
+        }
+
+        window.addEventListener("click", function(event) {
+            if (event.target == document.getElementById("modal-form")) {
+                closeFormModal();
+            }
+        });
+
+        function moveToKeyword(button) {
+            openFormModal();
+
+            document.getElementById("move-to-keyword-form").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const keyword_nama = document.getElementById("keyword_nama").value;
+                const penyakit_id = document.getElementById("penyakit_id").value;
+
+                fetch('/moveToKeyword', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'keyword_nama': keyword_nama,
+                        'penyakit_id': penyakit_id
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Terjadi kesalahan dalam permintaan.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Lakukan sesuatu dengan data yang diterima dari server
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan dalam permintaan: ' + error.message);
+                });
+
+            });
+        }
+    </script>
+</body>
+</html>
