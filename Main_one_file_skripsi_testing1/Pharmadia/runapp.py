@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, render_template_string
 import mysql.connector
 
+#ini runapp.py
+
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
@@ -8,8 +10,8 @@ app.secret_key = 'supersecretkey'
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Password_123",
-    database="pharmadiaa"
+    password="",
+    database="pharmadia"
 )
 
 # Route untuk halaman utama (index.html)
@@ -213,12 +215,6 @@ def adminCreateDisease():
         # Mengakses auth_id dari sesi yang telah diotentikasi
         auth_id = session.get('user_id')
 
-        # Mengambil username dari tabel authorization
-        cursor = db.cursor(dictionary=True)
-        cursor.execute("SELECT username FROM authorization WHERE auth_id = %s", (auth_id,))
-        user = cursor.fetchone()
-        cursor.close()
-
         # Cek apakah nama penyakit sudah ada
         cursor = db.cursor(dictionary=True)
         cursor.execute("SELECT * FROM penyakit WHERE penyakit_nama = %s", (penyakit_nama,))
@@ -265,10 +261,10 @@ def adminCreateDisease():
         else:
             cursor = db.cursor()
             query = """
-                INSERT INTO penyakit (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, username)
+                INSERT INTO penyakit (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id)
                 VALUES (%s, %s, %s, %s, %s)
             """
-            cursor.execute(query, (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, user['username']))
+            cursor.execute(query, (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id))
             db.commit()
             cursor.close()
 
@@ -299,7 +295,7 @@ def updateDisease():
 
         response = {'status': 'success', 'message': 'Data berhasil diperbarui.'}
         return jsonify(response)
-
+    
 # Route untuk menghapus data penyakit
 @app.route('/deleteDisease', methods=['POST'])
 def deleteDisease():
@@ -318,6 +314,232 @@ def deleteDisease():
 
         response = {'status': 'success', 'message': 'Data berhasil dihapus.'}
         return jsonify(response)
+    
+
+
+# Route untuk halaman keyword
+@app.route('/keyword')
+def adminKeyword():
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT keyword.penyakit_id, penyakit.penyakit_nama, keyword.keyword_nama 
+        FROM keyword 
+        JOIN penyakit ON keyword.penyakit_id = penyakit.penyakit_id
+    """)
+    keyword_data = cursor.fetchall()
+    cursor.close()
+    return render_template('data_admin/adminKeyword.html', keyword_data=keyword_data)
+
+# Route untuk halaman create keyword dengan method POST untuk menyimpan data
+@app.route('/createKeyword', methods=['GET', 'POST'])
+def adminCreateKeyword():
+    if request.method == 'POST':
+        penyakit_id = request.form['penyakit_id']
+        keyword_nama = request.form['keyword_nama']
+
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM keyword WHERE penyakit_id = %s AND keyword_nama = %s", (penyakit_id, keyword_nama))
+        existing_keyword = cursor.fetchone()
+        cursor.close()
+
+        if existing_keyword:
+            error_message = 'Kombinasi nama penyakit dan kata kunci sudah ada. Silakan gunakan kombinasi lain.'
+            return render_template_string('''
+                <script>
+                    function showErrorMessage(message) {
+                        var overlay = document.createElement('div');
+                        overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;';
+
+                        var alertBox = document.createElement('div');
+                        alertBox.style.cssText = 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #EEEEEE; color: black; padding: 20px; border: 1px solid #176B87; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 10000; font-family: "Open Sans", sans-serif; text-align: center;';
+
+                        var messageElement = document.createElement('p');
+                        messageElement.innerText = message;
+
+                        var closeButton = document.createElement('button');
+                        closeButton.innerText = 'OK';
+                        closeButton.style.cssText = 'background-color: #176B87; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-family: "Open Sans", sans-serif; width: fit-content; margin: 0 auto;';
+
+                        closeButton.onclick = function() {
+                            overlay.remove();
+                            window.location.href = '/createKeyword';
+                        };
+
+                        alertBox.appendChild(messageElement);
+                        alertBox.appendChild(closeButton);
+
+                        overlay.appendChild(alertBox);
+
+                        document.body.appendChild(overlay);
+                    }
+
+                    window.onload = function() {
+                        showErrorMessage('{{ error_message }}');
+                    };
+                </script>
+            ''', error_message=error_message)
+        else:
+            cursor = db.cursor()
+            query = """
+                INSERT INTO keyword (penyakit_id, keyword_nama)
+                VALUES (%s, %s)
+            """
+            cursor.execute(query, (penyakit_id, keyword_nama))
+            db.commit()
+            cursor.close()
+
+            return redirect(url_for('adminKeyword'))
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT penyakit_id, penyakit_nama FROM penyakit")
+    penyakit_data = cursor.fetchall()
+    cursor.close()
+    return render_template('data_admin/createKeyword.html', penyakit_data=penyakit_data)
+
+# Route untuk menyimpan data kata kunci yang diperbarui ke database
+@app.route('/updateKeyword', methods=['POST'])
+def updateKeyword():
+    if request.method == 'POST':
+        try:
+            data = request.get_json()
+            print("Received data:", data)
+
+            keyword_id = data['id']
+            keyword_nama = data['keyword_nama']
+
+            cursor = db.cursor()
+            query = """
+                    UPDATE keyword
+                    SET keyword_nama = %s
+                    WHERE keyword_id = %s
+                """
+            cursor.execute(query, (keyword_nama, keyword_id))
+            db.commit()
+            cursor.close()
+
+            response = {'status': 'success', 'message': 'Data berhasil diperbarui.'}
+            return jsonify(response)
+        
+        except Exception as e:
+            print("Error updating disease:", str(e)) 
+            response = {'status': 'error', 'message': 'Gagal memperbarui data: ' + str(e)}
+            return jsonify(response), 500
+
+@app.route('/deleteKeyword', methods=['POST'])
+def deleteKeyword():
+    if request.method == 'POST':
+        try:
+            data = request.get_json()
+            keyword_id = data['id']
+            print("Received keyword_id:", keyword_id) 
+
+            cursor = db.cursor()
+            query = "DELETE FROM keyword WHERE keyword_id = %s"
+            cursor.execute(query, (keyword_id,))
+            db.commit()
+            cursor.close()
+
+            response = {'status': 'success', 'message': 'Kata kunci berhasil dihapus.'}
+            return jsonify(response)
+        except Exception as e:
+            print("Error deleting keyword:", str(e))
+            response = {'status': 'error', 'message': 'Gagal menghapus data: ' + str(e)}
+            return jsonify(response), 500
+    
+# Route untuk halaman about us
+@app.route('/aboutUs')
+def adminAbousUs():
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT *
+        FROM about_us
+    """)
+    aboutus_data = cursor.fetchall()
+    cursor.close()
+    return render_template('data_admin/adminAboutUs.html', aboutus_data=aboutus_data)
+
+# Route untuk menyimpan data about us yang diperbarui ke database@app.route('/updateAboutUs', methods=['POST'])
+@app.route('/updateAboutUs', methods=['POST'])
+def updateAboutUs():
+    if request.method == 'POST':
+        data = request.get_json()
+        deskripsi = data['deskripsi']
+        nama = data['nama']
+        no_telephone = data['no_telephone']
+        sosial_media = data['sosial_media']
+
+        cursor = db.cursor()
+        query = """
+            UPDATE about_us
+            SET deskripsi = %s, nama = %s, no_telephone = %s, sosial_media = %s
+            WHERE id = 1 
+        """
+        cursor.execute(query, (deskripsi, nama, no_telephone, sosial_media))
+        db.commit()
+        cursor.close()
+
+        response = {'status': 'success', 'message': 'Data berhasil diperbarui.'}
+        return jsonify(response)
+
+# Route untuk halaman keyword bank
+@app.route('/keywordBank')
+def adminKeywordBank():
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM keywordbank")
+    keyword_bank_data = cursor.fetchall()
+    cursor.close()
+    return render_template('data_admin/adminKeywordBank.html', keyword_bank_data=keyword_bank_data)
+
+# Route untuk menghapus data keyword bank
+@app.route('/deleteKeywordBank', methods=['POST'])
+def deleteKeywordBank():
+    if request.method == 'POST':
+        try:
+            data = request.get_json()
+            keywordbank_id = data['id']
+
+            cursor = db.cursor()
+            query = "DELETE FROM keywordbank WHERE keywordbank_id = %s"
+            cursor.execute(query, (keywordbank_id,))
+            db.commit()
+            cursor.close()
+
+            response = {'status': 'success', 'message': 'Kata kunci berhasil dihapus dari database.'}
+            return jsonify(response)
+        except Exception as e:
+            print("Error deleting keyword from database:", str(e))
+            response = {'status': 'error', 'message': 'Gagal menghapus data dari database: ' + str(e)}
+            return jsonify(response), 500
+
+@app.route('/moveToKeyword', methods=['POST'])
+def moveKeywords():
+    if request.method == 'POST':
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM keywordbank")
+        keywords = cursor.fetchall()
+        
+        for keyword in keywords:
+            keyword_id = keyword[0]
+            keyword_nama = keyword[1]
+            cursor.execute("INSERT INTO keyword (keyword_id, keyword_nama) VALUES (%s, %s)", (keyword_id, keyword_nama))
+        
+        cursor.execute("DELETE FROM keywordbank")
+        
+        cursor.close()
+        db.commit()
+        
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM keyword")
+        new_keywords = cursor.fetchall()
+        cursor.close()
+        
+        return render_template('keyword.html', keywords=new_keywords)
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 # Fungsi untuk mencari penyakit berdasarkan nama
 def searchDiseaseByName(name):
@@ -331,6 +553,45 @@ def searchDiseaseByName(name):
     result = cursor.fetchone()
     cursor.close()
     return result
+
+# Route untuk searching penyakit
+@app.route('/search', methods=['GET'])
+def search():
+    nama_penyakit = request.args.get('query')
+    query = """
+        SELECT
+            penyakit.penyakit_nama,
+            penyakit.penyakit_penanganan,
+            penyakit.penyakit_obat,
+            penyakit.penyakit_deskripsi
+        FROM penyakit
+        WHERE LOWER(penyakit.penyakit_nama) = LOWER(%s)
+    """
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(query, [nama_penyakit])
+
+    row = cursor.fetchone();
+    cursor.close()
+
+    response = {
+        'status': 'error',
+        'message': 'Data tidak ditemukan'
+    }
+    responseStatus = 404
+
+    if (row):
+        response = {
+            'status': 'success',
+            'data': {
+                'nama': row['penyakit_nama'],
+                'penanganan': row['penyakit_penanganan'],
+                'obat': row['penyakit_obat'],
+                'deskripsi': row['penyakit_deskripsi']
+            }
+        }
+        responseStatus = 200
+
+    return jsonify(response), responseStatus
 
 if __name__ == '__main__':
     app.run(debug=True)
