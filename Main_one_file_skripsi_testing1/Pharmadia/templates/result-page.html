@@ -39,39 +39,31 @@
     </div>
 
     <div class="container-for-resultpage">
-        <div id="searchResult" class="result"></div>
+        <div id="searchResult" class="result">
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
+            {% if disease %}
+                <p>
+                    <strong>Penyakit : </strong>
+                    {{ disease.name }}
+                </p>
+                <p>
+                    <strong>Penanganan : </strong>
+                    {{ disease.penanganan }}
+                </p>
+                <p>
+                    <strong>Obat : </strong>
+                    {{ disease.obat }}
+                </p>
+                <p>
+                    <strong>Deskripsi : </strong>
+                    {{ disease.description }}
+                </p>
+            {% endif %}
+        </div>
     </div>
 
     <script src="{{ url_for('static', filename='script/script.js') }}"></script>
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const query = urlParams.get('query');
-
-        // Fungsi untuk melakukan pencarian penyakit berdasarkan nama
-        function searchDiseaseByName(query) {
-            query = query.toLowerCase().trim();
-            // Cari penyakit berdasarkan nama (exact match)
-            return diseases.find(disease => disease.name.toLowerCase() === query);
-        }
-
-        // Melakukan pencarian berdasarkan query
-        function performSearch() {
-            if (query !== null && query !== '') {
-                var result = searchDiseaseByName(query);
-                if (result) {
-                    displaySearchResult(result.name, result.description);
-                } else {
-                    displaySearchResult('Penyakit tidak ditemukan', '');
-                }
-            }
-        }
-
-        // Memanggil fungsi pencarian saat halaman dimuat
-        window.onload = function() {
-            performSearch();
-        };
-    </script>
-
 </body>
 </html>

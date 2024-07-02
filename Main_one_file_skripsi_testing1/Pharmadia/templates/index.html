@@ -60,16 +60,6 @@
     <script src="{{ url_for('static', filename='script/script.js') }}"></script>
 
     <script>
-        document.getElementById("diseaseInput").addEventListener("keypress", function(event) {
-            if (event.keyCode === 13) { 
-                event.preventDefault();
-                var query = document.getElementById("diseaseInput").value.trim();
-                if (query !== '') {
-                    window.location.href = "/result-page?query=" + encodeURIComponent(query);
-                }
-            }
-        });
-
         let slideIndex = 0;
 
         function showSlide(n) {
