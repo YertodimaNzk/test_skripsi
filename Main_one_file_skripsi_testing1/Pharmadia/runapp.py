@@ -22,17 +22,18 @@ def index():
 # Route untuk halaman result-page
 @app.route('/result-page')
 def resultpage():
+    # Mendapatkan query parameter
     query = request.args.get('query')
-    if query:
-        result = searchDiseaseByName(query)
-        if result:
-            disease_name = result['name']
-            disease_description = result['description']
-        else:
-            disease_name = 'Penyakit tidak ditemukan'
-            disease_description = ''
-        return render_template('result-page.html', disease_name=disease_name, disease_description=disease_description)
-    return render_template('result-page.html', disease_name=None, disease_description=None)
+    # Kembalikan halaman result page dengan isi kosong
+    if not query:
+        return render_template('result-page.html', error='Penyakit tidak ditemukan')
+    # Melakukan pencarian di database
+    result = searchDiseaseByName(query)
+    if result == None:
+        # Menampilkan result page dengan data error
+        return render_template('result-page.html', error='Penyakit tidak ditemukan')
+    # Menampilkan result page dengan data hasil pencarian database
+    return render_template('result-page.html', disease=result)
 
 # Route untuk halaman about us for user
 @app.route('/aboutUsForUser')
@@ -545,53 +546,18 @@ def logout():
 def searchDiseaseByName(name):
     cursor = db.cursor(dictionary=True)
     query = """
-        SELECT penyakit_nama AS name, penyakit_deskripsi AS description
+        SELECT penyakit_nama AS name,
+        penyakit_deskripsi AS description,
+        penyakit_penanganan AS penanganan,
+        penyakit_obat AS obat
         FROM penyakit
         WHERE penyakit_nama LIKE %s
     """
     cursor.execute(query, ('%' + name + '%',))
     result = cursor.fetchone()
+    print(result)
     cursor.close()
     return result
-
-# Route untuk searching penyakit
-@app.route('/search', methods=['GET'])
-def search():
-    nama_penyakit = request.args.get('query')
-    query = """
-        SELECT
-            penyakit.penyakit_nama,
-            penyakit.penyakit_penanganan,
-            penyakit.penyakit_obat,
-            penyakit.penyakit_deskripsi
-        FROM penyakit
-        WHERE LOWER(penyakit.penyakit_nama) = LOWER(%s)
-    """
-    cursor = db.cursor(dictionary=True)
-    cursor.execute(query, [nama_penyakit])
-
-    row = cursor.fetchone();
-    cursor.close()
-
-    response = {
-        'status': 'error',
-        'message': 'Data tidak ditemukan'
-    }
-    responseStatus = 404
-
-    if (row):
-        response = {
-            'status': 'success',
-            'data': {
-                'nama': row['penyakit_nama'],
-                'penanganan': row['penyakit_penanganan'],
-                'obat': row['penyakit_obat'],
-                'deskripsi': row['penyakit_deskripsi']
-            }
-        }
-        responseStatus = 200
-
-    return jsonify(response), responseStatus
 
 if __name__ == '__main__':
     app.run(debug=True)
