@@ -313,25 +313,31 @@ def adminCreateDisease():
 @app.route('/updateDisease', methods=['POST'])
 def updateDisease():
     if request.method == 'POST':
-        data = request.get_json()
-        penyakit_id = data['penyakit_id']
-        penyakit_nama = data['penyakit_nama']
-        penyakit_penanganan = data['penyakit_penanganan']
-        penyakit_obat = data['penyakit_obat']
-        penyakit_deskripsi = data['penyakit_deskripsi']
+        try:
+            data = request.get_json()
+            penyakit_id = data['id']
+            penyakit_nama = data['penyakit_nama']
+            penyakit_penanganan = data['penyakit_penanganan']
+            penyakit_obat = data['penyakit_obat']
+            penyakit_deskripsi = data['penyakit_deskripsi']
 
-        cursor = db.cursor()
-        query = """
-            UPDATE penyakit
-            SET penyakit_nama = %s, penyakit_penanganan = %s, penyakit_obat = %s, penyakit_deskripsi = %s
-            WHERE penyakit_id = %s
-        """
-        cursor.execute(query, (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, penyakit_id))
-        db.commit()
-        cursor.close()
+            cursor = db.cursor()
+            query = """
+                UPDATE penyakit
+                SET penyakit_nama = %s, penyakit_penanganan = %s, penyakit_obat = %s, penyakit_deskripsi = %s
+                WHERE penyakit_id = %s
+            """
+            cursor.execute(query, (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, penyakit_id))
+            db.commit()
+            cursor.close()
 
-        response = {'status': 'success', 'message': 'Data berhasil diperbarui.'}
-        return jsonify(response)
+            response = {'status': 'success', 'message': 'Data berhasil diperbarui.'}
+            return jsonify(response)
+
+        except Exception as e:
+            print("Error updating disease:", str(e))
+            response = {'status': 'error', 'message': 'Gagal memperbarui data: ' + str(e)}
+            return jsonify(response), 500
     
 # Route untuk menghapus data penyakit
 @app.route('/deleteDisease', methods=['POST'])
