@@ -76,26 +76,31 @@
     <script>
         function editRow(row) {
             var cells = row.getElementsByTagName('td');
+            row.originalData = []; // Simpan data asli
+    
             for (var i = 0; i < cells.length - 1; i++) {
+                row.originalData.push(cells[i].innerText); // Simpan nilai asli
                 var input = document.createElement('input');
                 input.type = 'text';
                 input.value = cells[i].innerText;
                 cells[i].innerText = '';
                 cells[i].appendChild(input);
             }
+    
             row.querySelector('.edit-btn').style.display = 'none';
             row.querySelector('.delete-btn').style.display = 'none';
             row.querySelector('.save-btn').style.display = 'inline-block';
             row.querySelector('.cancel-btn').style.display = 'inline-block';
         }
-
+    
         function saveRow(row, id) {
-        var cells = row.getElementsByTagName('td');
-        var updatedData = [];
+            var cells = row.getElementsByTagName('td');
+            var updatedData = [];
+    
             for (var i = 0; i < cells.length - 1; i++) {
                 updatedData.push(cells[i].querySelector('input').value);
             }
-
+    
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -118,28 +123,28 @@
             xhttp.send(JSON.stringify({
                 id: id,
                 username: updatedData[0],
-                password: updatedData[1] 
+                password: updatedData[1]
             }));
         }
-
+    
         function cancelEdit(row) {
             var cells = row.getElementsByTagName('td');
             for (var i = 0; i < cells.length - 1; i++) {
-                var input = cells[i].getElementsByTagName('input')[0];
-                cells[i].innerText = input.value;
+                cells[i].innerText = row.originalData[i]; // Kembalikan nilai asli
             }
+    
             row.querySelector('.edit-btn').style.display = 'inline-block';
             row.querySelector('.delete-btn').style.display = 'inline-block';
             row.querySelector('.save-btn').style.display = 'none';
             row.querySelector('.cancel-btn').style.display = 'none';
         }
-
+    
         function confirmDelete(row) {
             if (confirm('Apakah Anda yakin ingin menghapus data?')) {
                 deleteRow(row);
             }
         }
-
+    
         function deleteRow(row) {
             row.remove();
             var id = row.querySelector('.delete-btn').getAttribute('data-id'); // Retrieve auth_id
