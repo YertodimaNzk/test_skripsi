@@ -10,8 +10,9 @@ app.secret_key = 'supersecretkey'
 db = mysql.connector.connect(
     host="localhost",
     user="root",
+    port=3306,
     password="",
-    database="pharmadia"
+    database="pharmadia_db"
 )
 
 # Route untuk halaman utama (index.html)
@@ -323,20 +324,31 @@ def deleteDisease():
 def adminKeyword():
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
-        SELECT keyword.penyakit_id, penyakit.penyakit_nama, keyword.keyword_nama 
+        SELECT keyword.keyword_id, penyakit.penyakit_nama, keyword.keyword_nama 
         FROM keyword 
         JOIN penyakit ON keyword.penyakit_id = penyakit.penyakit_id
     """)
     keyword_data = cursor.fetchall()
+    print("keyword_data",keyword_data)
     cursor.close()
     return render_template('data_admin/adminKeyword.html', keyword_data=keyword_data)
 
 # Route untuk halaman create keyword dengan method POST untuk menyimpan data
+from flask import request, render_template, render_template_string, redirect, url_for
+import logging
+
 @app.route('/createKeyword', methods=['GET', 'POST'])
 def adminCreateKeyword():
     if request.method == 'POST':
         penyakit_id = request.form['penyakit_id']
         keyword_nama = request.form['keyword_nama']
+
+
+        # Debugging print statements
+        print(f"penyakit_id: {penyakit_id}")
+        logging.info(f"penyakit_id: {penyakit_id}")
+
+
 
         cursor = db.cursor(dictionary=True)
         cursor.execute("SELECT * FROM keyword WHERE penyakit_id = %s AND keyword_nama = %s", (penyakit_id, keyword_nama))
@@ -397,6 +409,7 @@ def adminCreateKeyword():
     cursor.close()
     return render_template('data_admin/createKeyword.html', penyakit_data=penyakit_data)
 
+
 # Route untuk menyimpan data kata kunci yang diperbarui ke database
 @app.route('/updateKeyword', methods=['POST'])
 def updateKeyword():
@@ -407,6 +420,7 @@ def updateKeyword():
 
             keyword_id = data['id']
             keyword_nama = data['keyword_nama']
+            print("keyword_nama:", keyword_nama)
 
             cursor = db.cursor()
             query = """

@@ -61,7 +61,7 @@
                         <td>
                             <button class="data-admin-btn edit-btn" onclick="editRow(this.parentNode.parentNode)">Edit</button>
                             <button class="data-admin-btn delete-btn" data-id="{{ keyword.keyword_id }}" onclick="confirmDelete(this.parentNode.parentNode)">Hapus</button>
-                            <button class="data-admin-btn save-btn" style="display:none" onclick="saveRow(this.parentNode.parentNode, '{{ keyword.keyword_id }}')">Simpan</button>
+                            <button class="data-admin-btn save-btn" style="display:none" data-id="{{ keyword.keyword_id }}" onclick="saveRow(this.parentNode.parentNode, '{{ keyword.keyword_id }}')">Simpan</button>
                             <button class="data-admin-btn cancel-btn" style="display:none" onclick="cancelEdit(this.parentNode.parentNode)">Batal</button>
                         </td>
                     </tr>
@@ -105,6 +105,9 @@
         }
 
         function saveRow(row, id) {
+            var keywordId = row.querySelector('.delete-btn').dataset.id;
+
+            console.log("ID", keywordId)
             var cells = row.getElementsByTagName('td');
             var updatedData = [];
             for (var i = 0; i < cells.length - 1; i++) {
