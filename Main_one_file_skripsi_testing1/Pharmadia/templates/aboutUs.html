@@ -30,12 +30,14 @@
     <div class="aboutus-container">
         <div class="aboutus-content">
             <h2 class="title">Tentang Kami</h2>
-            <p class="aboutus-text">
-                Pharmadia adalah sebuah platform inovatif yang dirancang untuk memberikan layanan kesehatan yang lebih mudah diakses dan lebih interaktif. Dengan memanfaatkan teknologi terbaru dalam pengenalan suara, kami menyediakan fitur Speech Recognition untuk memperkaya pengalaman pengguna.
-            </p>
-            <p class="aboutus-text">Pharmadia</p>
-            <p class="aboutus-text">0912345678</p>
-            <p class="aboutus-text">Instagram: Pharmadiaaa10</p>
+            {% if about_us_data %}
+                <p class="aboutus-text">{{ about_us_data.deskripsi }}</p>
+                <p class="aboutus-text">{{ about_us_data.nama }}</p>
+                <p class="aboutus-text">{{ about_us_data.no_telephone }}</p>
+                <p class="aboutus-text">{{ about_us_data.sosial_media }}</p>
+            {% else %}
+                <p class="aboutus-text">Data tidak tersedia saat ini.</p>
+            {% endif %}
         </div>
     </div>
 
