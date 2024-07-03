@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session, render_template_string
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, render_template_string, flash
 import mysql.connector
+from datetime import datetime
 
 #ini runapp.py
 
@@ -11,7 +12,7 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     port=3306,
-    password="",
+    password="Password_123",
     database="pharmadia_db"
 )
 
@@ -38,13 +39,47 @@ def resultpage():
 
 # Route untuk halaman about us for user
 @app.route('/aboutUsForUser')
-def aboutUsForUser():
-    return render_template('aboutUs.html')
+def about_us():
+    try:
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT deskripsi, nama, sosial_media, no_telephone FROM about_us")
+        about_us_data = cursor.fetchone()
+
+        if about_us_data:
+            return render_template('aboutUs.html', about_us_data=about_us_data)
+        else:
+            return render_template('aboutUs.html', about_us_data=None) 
+
+    except Exception as e:
+        print("Error fetching about us data:", str(e))
+        return render_template('about_us.html', about_us_data=None)
 
 # Route untuk halaman feedback
 @app.route('/feedback')
 def feedback():
     return render_template('feedback.html')
+
+# Route untuk menyimpan hasil feedback user
+@app.route('/submitFeedback', methods=['POST'])
+def submit_feedback():
+    if db is None:
+        return "Database connection failed", 500
+
+    masukan = request.form['masukan']
+    created_at = datetime.now()
+
+    try:
+        cursor = db.cursor()
+        query = "INSERT INTO masukan (masukan, created_at) VALUES (%s, %s)"
+        cursor.execute(query, (masukan, created_at))
+        db.commit()
+        cursor.close()
+    except mysql.connector.Error as err:
+        logging.error(f"Error: {err}")
+        return "Database query failed", 500
+
+    flash("Feedback sudah terkirim")
+    return redirect(url_for('feedback'))
 
 # Route untuk halaman login
 @app.route('/login', methods=['GET', 'POST'])
@@ -463,38 +498,40 @@ def deleteKeyword():
     
 # Route untuk halaman about us
 @app.route('/aboutUs')
-def adminAbousUs():
+def adminAboutUs():
     cursor = db.cursor(dictionary=True)
-    cursor.execute("""
-        SELECT *
-        FROM about_us
-    """)
-    aboutus_data = cursor.fetchall()
+    cursor.execute("SELECT * FROM about_us")
+    about_us_data = cursor.fetchone()
     cursor.close()
-    return render_template('data_admin/adminAboutUs.html', aboutus_data=aboutus_data)
+    return render_template('data_admin/adminAboutUs.html', about_us_data=about_us_data)
 
 # Route untuk menyimpan data about us yang diperbarui ke database@app.route('/updateAboutUs', methods=['POST'])
 @app.route('/updateAboutUs', methods=['POST'])
 def updateAboutUs():
-    if request.method == 'POST':
-        data = request.get_json()
-        deskripsi = data['deskripsi']
-        nama = data['nama']
-        no_telephone = data['no_telephone']
-        sosial_media = data['sosial_media']
+    data = request.get_json()
+    deskripsi = data.get('deskripsi')
+    nama = data.get('nama')
+    no_telephone = data.get('no_telephone')
+    sosial_media = data.get('sosial_media')
 
+    if not deskripsi or not nama or not no_telephone or not sosial_media:
+        return jsonify({'status': 'error', 'message': 'Missing data'}), 400
+
+    try:
         cursor = db.cursor()
-        query = """
-            UPDATE about_us
-            SET deskripsi = %s, nama = %s, no_telephone = %s, sosial_media = %s
-            WHERE id = 1 
+        update_query = """
+            UPDATE about_us 
+            SET deskripsi = %s, no_telephone = %s, sosial_media = %s
+            WHERE nama = %s
         """
-        cursor.execute(query, (deskripsi, nama, no_telephone, sosial_media))
+        cursor.execute(update_query, (deskripsi, no_telephone, sosial_media, nama))
         db.commit()
         cursor.close()
-
-        response = {'status': 'success', 'message': 'Data berhasil diperbarui.'}
-        return jsonify(response)
+        return jsonify({'status': 'success'}), 200
+    except Exception as e:
+        db.rollback()
+        print(f"Error: {e}") 
+        return jsonify({'status': 'error', 'message': 'Failed to update data'}), 500
 
 # Route untuk halaman keyword bank
 @app.route('/keywordBank')
