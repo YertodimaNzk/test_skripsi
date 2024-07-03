@@ -54,15 +54,14 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ aboutus_data.deskripsi }}</td>
-                        <td>{{ aboutus_data.nama }}</td>
-                        <td>{{ aboutus_data.no_telephone }}</td>
-                        <td>{{ aboutus_data.sosial_media }}</td>
+                        <td>{{ about_us_data.deskripsi }}</td>
+                        <td>{{ about_us_data.nama }}</td>
+                        <td>{{ about_us_data.no_telephone }}</td>
+                        <td>{{ about_us_data.sosial_media }}</td>
                         <td>
                             <button class="data-admin-btn edit-btn" onclick="editRow(this.parentNode.parentNode)">Edit</button>
                             <button class="data-admin-btn save-btn" style="display:none" onclick="saveRow(this.parentNode.parentNode)">Simpan</button>
                             <button class="data-admin-btn cancel-btn" style="display:none" onclick="cancelEdit(this.parentNode.parentNode)">Batal</button>
-                            <button class="data-admin-btn delete-btn" onclick="confirmDelete(this.parentNode.parentNode)">Hapus</button>
                         </td>
                     </tr>
                 </tbody>
@@ -83,7 +82,6 @@
                 cells[i].appendChild(input);
             }
             row.querySelector('.edit-btn').style.display = 'none';
-            row.querySelector('.delete-btn').style.display = 'none';
             row.querySelector('.save-btn').style.display = 'inline-block';
             row.querySelector('.cancel-btn').style.display = 'inline-block';
 
@@ -116,7 +114,6 @@
                                 cells[i].innerText = updatedData[i];
                             }
                             row.querySelector('.edit-btn').style.display = 'inline-block';
-                            row.querySelector('.delete-btn').style.display = 'inline-block';
                             row.querySelector('.save-btn').style.display = 'none';
                             row.querySelector('.cancel-btn').style.display = 'none';
                         } else {
@@ -144,33 +141,8 @@
                 cells[i].innerText = input.value;
             }
             row.querySelector('.edit-btn').style.display = 'inline-block';
-            row.querySelector('.delete-btn').style.display = 'inline-block';
             row.querySelector('.save-btn').style.display = 'none';
             row.querySelector('.cancel-btn').style.display = 'none';
-        }
-
-        function confirmDelete(row) {
-            if (confirm('Are you sure you want to delete this entry?')) {
-                deleteRow(row);
-            }
-        }
-
-        function deleteRow(row) {
-            fetch(`/deleteAboutUs`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    row.remove();
-                } else {
-                    alert('Failed to delete data.');
-                }
-            });
         }
     </script>
 </body>
