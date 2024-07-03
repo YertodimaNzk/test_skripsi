@@ -31,7 +31,7 @@
     <div class="form-for-search-container">
         <form class="form-for-search">
             <input id="diseaseInput" class="form-for-input" type="search" placeholder="Ketik untuk mencari informasi kesehatan">
-            <button class="button-for-search" onclick="startSpeechRecognition()" id="micButton">
+            <button class="button-for-search" type="button" onclick="startSpeechRecognition()" id="micButton">
                 <img src="{{ url_for('static', filename='images/mic.png') }}" class="mic-img" alt="Mic">
             </button>
         </form>
@@ -58,7 +58,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='script/script.js') }}"></script>
-
+ 
     <script>
         let slideIndex = 0;
 
