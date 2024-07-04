@@ -13,7 +13,7 @@ db = mysql.connector.connect(
     user="root",
     port=3306,
     password="Password_123",
-    database="pharmadia_db"
+    database="pharmadia"
 )
 
 # Route untuk halaman utama (index.html)
@@ -26,11 +26,12 @@ def index():
 def resultpage():
     # Mendapatkan query parameter
     query = request.args.get('query')
+    logging.info(f"query penyakit: {query}")
     # Kembalikan halaman result page dengan isi kosong
     if not query:
         return render_template('result-page.html', error='Penyakit tidak ditemukan')
     # Melakukan pencarian di database
-    result = searchDiseaseByName(query)
+    result = searchDiseaseByKeyword(query)
     if result == None:
         # Menampilkan result page dengan data error
         return render_template('result-page.html', error='Penyakit tidak ditemukan')
@@ -48,7 +49,7 @@ def about_us():
         if about_us_data:
             return render_template('aboutUs.html', about_us_data=about_us_data)
         else:
-            return render_template('aboutUs.html', about_us_data=None) 
+            return render_template('aboutUs.html', about_us_data=None)
 
     except Exception as e:
         print("Error fetching about us data:", str(e))
@@ -251,15 +252,24 @@ def adminCreateDisease():
 
         # Mengakses auth_id dari sesi yang telah diotentikasi
         auth_id = session.get('user_id')
+        username = session.get('username')
 
         # Cek apakah nama penyakit sudah ada
         cursor = db.cursor(dictionary=True)
         cursor.execute("SELECT * FROM penyakit WHERE penyakit_nama = %s", (penyakit_nama,))
         existing_disease = cursor.fetchone()
+        cursor.execute("SELECT * FROM keyword WHERE keyword_nama = %s", (penyakit_nama,))
+        existing_keyword = cursor.fetchone()
+
+        db.commit()
         cursor.close()
 
-        if existing_disease:
-            error_message = 'Nama penyakit sudah ada. Silakan gunakan nama penyakit lain.'
+        if existing_disease or existing_keyword:
+            error_message = ''
+            if (existing_disease):
+                error_message = 'Nama penyakit sudah ada. Silakan gunakan nama penyakit lain.'
+            if (existing_keyword):
+                error_message = 'Nama penyakit sudah digunakan sebagai kata kunci penyakit lain. Silahkan gunakan nama penyakit lain'
             return render_template_string('''
                 <script>
                     function showErrorMessage(message) {
@@ -296,12 +306,35 @@ def adminCreateDisease():
             ''', error_message=error_message)
 
         else:
+            # Ambil koneksi
             cursor = db.cursor()
+
+            # Memasukan penyakit ke table penyakit
             query = """
-                INSERT INTO penyakit (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id)
+                INSERT INTO penyakit (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id, created_by, update_by)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """
+            cursor.execute(query, (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id, username, username))
+
+            # Jika tidak berhasil memasukan data penyakit
+            if cursor.rowcount <= 0:
+                # Rollback transaksi
+                db.rollback()
+                return redirect(url_for('adminDisease'))
+
+            penyakit_id = cursor.lastrowid
+            query = """
+                INSERT INTO keyword (penyakit_id, keyword_nama, auth_id, created_by, updated_by)
                 VALUES (%s, %s, %s, %s, %s)
             """
-            cursor.execute(query, (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id))
+            cursor.execute(query, (penyakit_id, penyakit_nama, auth_id, username, username))
+
+            # Jika tidak berhasil memasukan data penyakit
+            if cursor.rowcount <= 0:
+                # Rollback transaksi
+                db.rollback()
+                return redirect(url_for('adminDisease'))
+
             db.commit()
             cursor.close()
 
@@ -338,7 +371,7 @@ def updateDisease():
             print("Error updating disease:", str(e))
             response = {'status': 'error', 'message': 'Gagal memperbarui data: ' + str(e)}
             return jsonify(response), 500
-    
+
 # Route untuk menghapus data penyakit
 @app.route('/deleteDisease', methods=['POST'])
 def deleteDisease():
@@ -357,7 +390,7 @@ def deleteDisease():
 
         response = {'status': 'success', 'message': 'Data berhasil dihapus.'}
         return jsonify(response)
-    
+
 
 
 # Route untuk halaman keyword
@@ -365,8 +398,8 @@ def deleteDisease():
 def adminKeyword():
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
-        SELECT keyword.keyword_id, penyakit.penyakit_nama, keyword.keyword_nama 
-        FROM keyword 
+        SELECT keyword.keyword_id, penyakit.penyakit_nama, keyword.keyword_nama
+        FROM keyword
         JOIN penyakit ON keyword.penyakit_id = penyakit.penyakit_id
     """)
     keyword_data = cursor.fetchall()
@@ -384,20 +417,23 @@ def adminCreateKeyword():
         penyakit_id = request.form['penyakit_id']
         keyword_nama = request.form['keyword_nama']
 
+        # Mengakses auth_id dari sesi yang telah diotentikasi
+        auth_id = session.get('user_id')
+        username = session.get('username')
 
         # Debugging print statements
         print(f"penyakit_id: {penyakit_id}")
         logging.info(f"penyakit_id: {penyakit_id}")
 
-
-
         cursor = db.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM keyword WHERE penyakit_id = %s AND keyword_nama = %s", (penyakit_id, keyword_nama))
+        # Handle 1 nama keyword hanya boleh 1 penyakit saja
+        # (karena ui tidak mendukung nampilin atau memilih 2 atau lebih penyakit berbeda yang mau ditampilkan)
+        cursor.execute("SELECT * FROM keyword WHERE keyword_nama = %s", (keyword_nama,))
         existing_keyword = cursor.fetchone()
         cursor.close()
 
         if existing_keyword:
-            error_message = 'Kombinasi nama penyakit dan kata kunci sudah ada. Silakan gunakan kombinasi lain.'
+            error_message = 'Kata kunci sudah digunakan. Silakan gunakan kata kunci lain.'
             return render_template_string('''
                 <script>
                     function showErrorMessage(message) {
@@ -435,10 +471,10 @@ def adminCreateKeyword():
         else:
             cursor = db.cursor()
             query = """
-                INSERT INTO keyword (penyakit_id, keyword_nama)
-                VALUES (%s, %s)
+                INSERT INTO keyword (penyakit_id, keyword_nama, auth_id, created_by, updated_by)
+                VALUES (%s, %s, %s, %s, %s)
             """
-            cursor.execute(query, (penyakit_id, keyword_nama))
+            cursor.execute(query, (penyakit_id, keyword_nama, auth_id, username, username))
             db.commit()
             cursor.close()
 
@@ -475,9 +511,9 @@ def updateKeyword():
 
             response = {'status': 'success', 'message': 'Data berhasil diperbarui.'}
             return jsonify(response)
-        
+
         except Exception as e:
-            print("Error updating disease:", str(e)) 
+            print("Error updating disease:", str(e))
             response = {'status': 'error', 'message': 'Gagal memperbarui data: ' + str(e)}
             return jsonify(response), 500
 
@@ -487,7 +523,7 @@ def deleteKeyword():
         try:
             data = request.get_json()
             keyword_id = data['id']
-            print("Received keyword_id:", keyword_id) 
+            print("Received keyword_id:", keyword_id)
 
             cursor = db.cursor()
             query = "DELETE FROM keyword WHERE keyword_id = %s"
@@ -501,7 +537,7 @@ def deleteKeyword():
             print("Error deleting keyword:", str(e))
             response = {'status': 'error', 'message': 'Gagal menghapus data: ' + str(e)}
             return jsonify(response), 500
-    
+
 # Route untuk halaman about us
 @app.route('/aboutUs')
 def adminAboutUs():
@@ -526,7 +562,7 @@ def updateAboutUs():
     try:
         cursor = db.cursor()
         update_query = """
-            UPDATE about_us 
+            UPDATE about_us
             SET deskripsi = %s, no_telephone = %s, sosial_media = %s
             WHERE nama = %s
         """
@@ -536,7 +572,7 @@ def updateAboutUs():
         return jsonify({'status': 'success'}), 200
     except Exception as e:
         db.rollback()
-        print(f"Error: {e}") 
+        print(f"Error: {e}")
         return jsonify({'status': 'error', 'message': 'Failed to update data'}), 500
 
 # Route untuk halaman keyword bank
@@ -575,22 +611,22 @@ def moveKeywords():
         cursor = db.cursor()
         cursor.execute("SELECT * FROM keywordbank")
         keywords = cursor.fetchall()
-        
+
         for keyword in keywords:
             keyword_id = keyword[0]
             keyword_nama = keyword[1]
             cursor.execute("INSERT INTO keyword (keyword_id, keyword_nama) VALUES (%s, %s)", (keyword_id, keyword_nama))
-        
+
         cursor.execute("DELETE FROM keywordbank")
-        
+
         cursor.close()
         db.commit()
-        
+
         cursor = db.cursor()
         cursor.execute("SELECT * FROM keyword")
         new_keywords = cursor.fetchall()
         cursor.close()
-        
+
         return render_template('keyword.html', keywords=new_keywords)
 
 @app.route('/logout')
@@ -599,21 +635,31 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
-# Fungsi untuk mencari penyakit berdasarkan nama
-def searchDiseaseByName(name):
+# Fungsi untuk mencari penyakit berdasarkan keyword
+def searchDiseaseByKeyword(keyword):
     cursor = db.cursor(dictionary=True)
     query = """
-        SELECT penyakit_nama AS name,
-        penyakit_deskripsi AS description,
-        penyakit_penanganan AS penanganan,
-        penyakit_obat AS obat
-        FROM penyakit
-        WHERE penyakit_nama LIKE %s
+        SELECT
+            p.penyakit_nama AS name,
+            p.penyakit_deskripsi AS description,
+            p.penyakit_penanganan AS penanganan,
+            p.penyakit_obat AS obat
+        FROM keyword AS k
+        JOIN penyakit AS p ON p.penyakit_id = k.penyakit_id
+        WHERE k.keyword_nama LIKE %s;
     """
-    cursor.execute(query, ('%' + name + '%',))
-    result = cursor.fetchone()
-    print(result)
+    cursor.execute(query, ('%' + keyword + '%',))
+    # Mendapatkan semua hasil (karena menggunakan LIKE ada kemungkinan hasil lebih dari 1)
+    result = cursor.fetchall()
     cursor.close()
+    # Jika hasil yang didapat dari database tidak array kosong
+    if len(result) != 0:
+        # Ambil penyakit yang ditemukan pertama
+        result = result[0]
+    # Jika hasilnya array kosong
+    else:
+        # Kembalikan None
+        result = None
     return result
 
 if __name__ == '__main__':
