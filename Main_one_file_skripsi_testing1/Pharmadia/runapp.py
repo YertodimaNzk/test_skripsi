@@ -12,8 +12,8 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     port=3306,
-    password="Password_123",
-    database="pharmadia"
+    password="",
+    database="pharmadia_db"
 )
 
 # Route untuk halaman utama (index.html)
@@ -581,8 +581,13 @@ def adminKeywordBank():
     cursor = db.cursor(dictionary=True)
     cursor.execute("SELECT * FROM keywordbank")
     keyword_bank_data = cursor.fetchall()
+    cursor.execute(""" SELECT * FROM penyakit """)
+    penyakit_data = cursor.fetchall()
+    cursor.execute(""" SELECT * FROM keyword """)
+    keywords = cursor.fetchall()
     cursor.close()
-    return render_template('data_admin/adminKeywordBank.html', keyword_bank_data=keyword_bank_data)
+    return render_template('data_admin/adminKeywordBank.html', keyword_bank_data=keyword_bank_data, penyakit_data=penyakit_data, keywords=keywords)
+
 
 # Route untuk menghapus data keyword bank
 @app.route('/deleteKeywordBank', methods=['POST'])
@@ -608,26 +613,33 @@ def deleteKeywordBank():
 @app.route('/moveToKeyword', methods=['POST'])
 def moveKeywords():
     if request.method == 'POST':
+        print(request.json)
+        keyword_nama = request.json['keyword_nama']
+        penyakit_id = request.json['penyakit_id']
+        print(617, penyakit_id)
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM keywordbank")
-        keywords = cursor.fetchall()
-
-        for keyword in keywords:
-            keyword_id = keyword[0]
-            keyword_nama = keyword[1]
-            cursor.execute("INSERT INTO keyword (keyword_id, keyword_nama) VALUES (%s, %s)", (keyword_id, keyword_nama))
-
-        cursor.execute("DELETE FROM keywordbank")
+        cursor.execute("INSERT INTO keyword (keyword_nama, penyakit_id) VALUES (%s, %s)", (keyword_nama,penyakit_id,))
+        cursor.execute("DELETE FROM keywordbank WHERE keywordbank_nama = %s", (keyword_nama,))
 
         cursor.close()
         db.commit()
 
-        cursor = db.cursor()
-        cursor.execute("SELECT * FROM keyword")
-        new_keywords = cursor.fetchall()
-        cursor.close()
+        # cursor = db.cursor()
+        # cursor.execute("SELECT * FROM keyword")
+        # new_keywords = cursor.fetchall()
+        # cursor.close()
 
-        return render_template('keyword.html', keywords=new_keywords)
+        # return render_template('adminKeywordBank.html', keywords=new_keywords)
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM keywordbank")
+        keyword_bank_data = cursor.fetchall()
+        print("keyword_bank_data",keyword_bank_data)
+        cursor.execute(""" SELECT * FROM penyakit """)
+        penyakit_data = cursor.fetchall()
+        print("penyakit_data",penyakit_data)
+        cursor.close()
+        return render_template('data_admin/adminKeywordBank.html', keyword_bank_data=keyword_bank_data, penyakit_data=penyakit_data)
+
 
 @app.route('/logout')
 def logout():

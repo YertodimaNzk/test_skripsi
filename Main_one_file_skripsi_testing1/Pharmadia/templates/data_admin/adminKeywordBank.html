@@ -70,7 +70,7 @@
                 <form id="move-to-keyword-form">
                     <div class="form-group-create-page">
                         <label for="keyword_nama" class="form-label-create-page">Kata Kunci</label>
-                        <textarea class="form-control-create-page" id="keyword_nama" name="keyword_nama" rows="5" placeholder="Masukkan Kata Kunci" required></textarea>
+                        <textarea class="form-control-create-page" id="keyword_nama" name="keyword_nama" rows="5" placeholder="Masukkan Kata Kunci" disabled></textarea>
                     </div>
                     <label for="penyakit">Penyakit:</label><br />
                     <select class="form-control-create-page" id="penyakit_id" name="penyakit_id" required>
@@ -116,14 +116,17 @@
             });
         }
 
-        function openFormModal() {
+        function openFormModal(keywordbank_nama) {
             const modal = document.getElementById("modal-form");
             modal.classList.add("show");
 
             modal.style.top = `${(window.innerHeight - modal.offsetHeight) / 2}px`;
             modal.style.left = `${(window.innerWidth - modal.offsetWidth) / 2}px`;
 
-            modal.querySelector("input").focus();
+            // Mengatur nilai textarea dengan keywordbank_nama yang sesuai
+            document.getElementById("keyword_nama").value = keywordbank_nama;
+
+            modal.querySelector("textarea").focus();
         }
 
         function closeFormModal() {
@@ -136,9 +139,7 @@
             }
         });
 
-        function moveToKeyword(button) {
-            openFormModal();
-
+        document.addEventListener('DOMContentLoaded', function() {
             document.getElementById("move-to-keyword-form").addEventListener("submit", function(event) {
                 event.preventDefault();
 
@@ -155,21 +156,31 @@
                         'penyakit_id': penyakit_id
                     })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Terjadi kesalahan dalam permintaan.');
-                    }
-                    return response.json();
-                })
+                // .then(response => {
+                //     if (!response.ok) {
+                //         throw new Error('Terjadi kesalahan dalam permintaan.');
+                //     }
+                //     return response.json();
+                // })
                 .then(data => {
                     // Lakukan sesuatu dengan data yang diterima dari server
+                    // Contoh: Menampilkan pesan sukses atau melakukan operasi lainnya
+                    console.log('Permintaan berhasil:', data);
+                    // Auto reload setelah permintaan selesai
+                    window.location.reload();
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan dalam permintaan: ' + error.message);
                 });
-
             });
+        });
+
+
+        function moveToKeyword(button) {
+        const row = button.closest('tr');
+        const keywordbank_nama = row.querySelector('td').innerText.trim();
+        openFormModal(keywordbank_nama);
         }
     </script>
 </body>
