@@ -311,7 +311,7 @@ def adminCreateDisease():
 
             # Memasukan penyakit ke table penyakit
             query = """
-                INSERT INTO penyakit (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id, created_by, update_by)
+                INSERT INTO penyakit (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id, created_by, updated_by)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """
             cursor.execute(query, (penyakit_nama, penyakit_penanganan, penyakit_obat, penyakit_deskripsi, auth_id, username, username))
@@ -541,7 +541,7 @@ def deleteKeyword():
 # Route untuk halaman about us
 @app.route('/aboutUs')
 def adminAboutUs():
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(dictionary=True, buffered=True)
     cursor.execute("SELECT * FROM about_us")
     about_us_data = cursor.fetchone()
     cursor.close()

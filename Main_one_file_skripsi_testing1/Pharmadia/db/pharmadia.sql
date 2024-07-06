@@ -21,10 +21,10 @@ USE `pharmadia`;
 -- Table structure for table `aboutus`
 --
 
-DROP TABLE IF EXISTS `aboutus`;
+DROP TABLE IF EXISTS `about_us`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `aboutus` (
+CREATE TABLE `about_us` (
   `nama` varchar(200) NOT NULL,
   `Deskripsi` varchar(500) NOT NULL,
   `sosial_media` varchar(200) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `aboutus` (
 -- Dumping data for table `aboutus`
 --
 
-LOCK TABLES `aboutus` WRITE;
+LOCK TABLES `about_us` WRITE;
 /*!40000 ALTER TABLE `aboutus` DISABLE KEYS */;
 /*!40000 ALTER TABLE `aboutus` ENABLE KEYS */;
 UNLOCK TABLES;
