@@ -18,7 +18,7 @@ USE `pharmadia`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `aboutus`
+-- Table structure for table `about_us`
 --
 
 DROP TABLE IF EXISTS `about_us`;
@@ -28,24 +28,24 @@ CREATE TABLE `about_us` (
   `nama` varchar(200) NOT NULL,
   `Deskripsi` varchar(500) NOT NULL,
   `sosial_media` varchar(200) NOT NULL,
-  `nomor_telepon` varchar(200) NOT NULL,
+  `no_telephone` varchar(200) NOT NULL,
   `auth_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `created_by` varchar(200) NOT NULL,
   `updated_by` varchar(200) NOT NULL,
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`auth_id`),
-  CONSTRAINT `fk_aboutus_authorization1` FOREIGN KEY (`auth_id`) REFERENCES `authorization` (`auth_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_about_us_authorization1` FOREIGN KEY (`auth_id`) REFERENCES `authorization` (`auth_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `aboutus`
+-- Dumping data for table `about_us`
 --
 
 LOCK TABLES `about_us` WRITE;
-/*!40000 ALTER TABLE `aboutus` DISABLE KEYS */;
-/*!40000 ALTER TABLE `aboutus` ENABLE KEYS */;
+/*!40000 ALTER TABLE `about_us` DISABLE KEYS */;
+/*!40000 ALTER TABLE `about_us` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -90,8 +90,11 @@ CREATE TABLE `keyword` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_by` varchar(200) NOT NULL,
   `updated_by` varchar(200) NOT NULL,
-  PRIMARY KEY (`keyword_id`,`penyakit_id`,`auth_id`),
-  CONSTRAINT `fk_keyword_penyakit1` FOREIGN KEY (`penyakit_id`, `auth_id`) REFERENCES `penyakit` (`penyakit_id`, `auth_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`keyword_id`),
+  KEY `auth_id` (`auth_id`),
+  KEY `penyakit_id` (`penyakit_id`),
+  CONSTRAINT `fk_keyword_penyakit1` FOREIGN KEY (`penyakit_id`) REFERENCES `penyakit` (`penyakit_id`),
+  CCONSTRAIN `fk_keyword_penyakit2` FOREIGN KEY (`auth_id`) REFERENCES `auth_user` (`auth_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -113,16 +116,16 @@ DROP TABLE IF EXISTS `keywordbank`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `keywordbank` (
   `keywordbank_id` int(11) NOT NULL AUTO_INCREMENT,
-  `keyword_nama` varchar(200) NOT NULL,
-  `keyword_id` int(11) NOT NULL,
+  `keywordbank_nama` varchar(200),
+  `keyword_id` int(11) DEFAULT NULL,
   `auth_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`keywordbank_id`,`keyword_id`,`auth_id`),
-  KEY `fk_keywordbank_authorization1_idx` (`auth_id`),
-  KEY `fk_keywordbank_keyword1` (`keyword_id`),
-  CONSTRAINT `fk_keywordbank_authorization1` FOREIGN KEY (`auth_id`) REFERENCES `authorization` (`auth_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_keywordbank_keyword1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`keyword_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`keywordbank_id`),
+  KEY `auth_id` (`auth_id`),
+  KEY `keyword_id` (`keyword_id`),
+  CONSTRAINT `keywordbank_ibfk_1` FOREIGN KEY (`auth_id`) REFERENCES `authorization` (`auth_id`),
+  CONSTRAINT `keywordbank_ibfk_2` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`keyword_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,8 +177,8 @@ CREATE TABLE `penyakit` (
   `penyakit_deskripsi` varchar(5000) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_by` varchar(200) NOT NULL,
-  `update_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `update_by` varchar(200) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_by` varchar(200) NOT NULL,
   PRIMARY KEY (`penyakit_id`,`auth_id`),
   KEY `fk_penyakit_authorization_idx` (`auth_id`),
   CONSTRAINT `fk_penyakit_authorization` FOREIGN KEY (`auth_id`) REFERENCES `authorization` (`auth_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
