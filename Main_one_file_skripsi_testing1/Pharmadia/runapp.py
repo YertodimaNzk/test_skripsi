@@ -12,7 +12,7 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     port=3306,
-    password="Password_123",
+    password="",
     database="pharmadia_db3"
 )
 
@@ -570,7 +570,7 @@ def updateAboutUs():
         cursor = db.cursor()
         update_query = """
             UPDATE about_us
-            SET deskripsi = %s, no_telephone = %s, sosial_media = %s
+            SET deskripsi = %s, no_telepone = %s, sosial_media = %s
             WHERE nama = %s
         """
         cursor.execute(update_query, (deskripsi, no_telepone, sosial_media, nama))
