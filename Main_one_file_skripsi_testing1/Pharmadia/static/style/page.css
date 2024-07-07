@@ -485,3 +485,8 @@ textarea.form-control-for-feedback {
     font-size: 24px;
     cursor: pointer;
 }
+
+.error-message {
+    color: #f44336;
+    margin-bottom: 15px;
+}
