@@ -56,7 +56,7 @@
                     <tr>
                         <td>{{ about_us_data.deskripsi }}</td>
                         <td>{{ about_us_data.nama }}</td>
-                        <td>{{ about_us_data.no_telephone }}</td>
+                        <td>{{ about_us_data.no_telepone }}</td>
                         <td>{{ about_us_data.sosial_media }}</td>
                         <td>
                             <button class="data-admin-btn edit-btn" onclick="editRow(this.parentNode.parentNode)">Edit</button>
@@ -129,7 +129,7 @@
             xhttp.send(JSON.stringify({
                 deskripsi: updatedData[0],
                 nama: updatedData[1],
-                no_telephone: updatedData[2],
+                no_telepone: updatedData[2],
                 sosial_media: updatedData[3]
             }));
         }
