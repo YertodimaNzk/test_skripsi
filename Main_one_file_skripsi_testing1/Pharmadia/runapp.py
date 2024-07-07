@@ -12,8 +12,8 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     port=3306,
-    password="",
-    database="pharmadia_db"
+    password="Password_123",
+    database="pharmadia_db3"
 )
 
 # Route untuk halaman utama (index.html)
@@ -50,7 +50,7 @@ def resultpage():
 def about_us():
     try:
         cursor = db.cursor(dictionary=True)
-        cursor.execute("SELECT deskripsi, nama, sosial_media, no_telephone FROM about_us")
+        cursor.execute("SELECT deskripsi, nama, sosial_media, no_telepone FROM about_us")
         about_us_data = cursor.fetchone()
 
         if about_us_data:
@@ -560,10 +560,10 @@ def updateAboutUs():
     data = request.get_json()
     deskripsi = data.get('deskripsi')
     nama = data.get('nama')
-    no_telephone = data.get('no_telephone')
+    no_telepone = data.get('no_telepone')
     sosial_media = data.get('sosial_media')
 
-    if not deskripsi or not nama or not no_telephone or not sosial_media:
+    if not deskripsi or not nama or not no_telepone or not sosial_media:
         return jsonify({'status': 'error', 'message': 'Missing data'}), 400
 
     try:
@@ -573,7 +573,7 @@ def updateAboutUs():
             SET deskripsi = %s, no_telephone = %s, sosial_media = %s
             WHERE nama = %s
         """
-        cursor.execute(update_query, (deskripsi, no_telephone, sosial_media, nama))
+        cursor.execute(update_query, (deskripsi, no_telepone, sosial_media, nama))
         db.commit()
         cursor.close()
         return jsonify({'status': 'success'}), 200
