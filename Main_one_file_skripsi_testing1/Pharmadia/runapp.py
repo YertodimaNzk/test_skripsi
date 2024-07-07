@@ -26,10 +26,17 @@ def index():
 def resultpage():
     # Mendapatkan query parameter
     query = request.args.get('query')
+
     logging.info(f"query penyakit: {query}")
+    print(f"query penyakit: {query}")
     # Kembalikan halaman result page dengan isi kosong
     if not query:
         return render_template('result-page.html', error='Penyakit tidak ditemukan')
+    cursor = db.cursor()
+    query1 = "INSERT INTO keywordbank (keywordbank_nama) VALUES (%s)"
+    cursor.execute(query1, (query,))
+    db.commit()
+    cursor.close()
     # Melakukan pencarian di database
     result = searchDiseaseByKeyword(query)
     if result == None:
@@ -595,7 +602,10 @@ def deleteKeywordBank():
     if request.method == 'POST':
         try:
             data = request.get_json()
+            print(f"Received data: {data}")  # Log the received data
             keywordbank_id = data['id']
+            print(f"Deleting keyword with ID: {keywordbank_id}")
+            
 
             cursor = db.cursor()
             query = "DELETE FROM keywordbank WHERE keywordbank_id = %s"

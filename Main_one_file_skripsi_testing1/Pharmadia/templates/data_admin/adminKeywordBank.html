@@ -51,7 +51,7 @@
                 </thead>
                 <tbody>
                     {% for keywordbank in keyword_bank_data %}
-                        <tr data-id="{{ keywordbank.id }}">
+                        <tr data-id="{{ keywordbank.keywordbank_id }}">
                             <td>{{ keywordbank.keywordbank_nama }}</td>
                             <td>
                                 <button class="data-admin-btn" onclick="moveToKeyword(this)">Pindahkan ke Keyword</button>
@@ -95,6 +95,7 @@
         function deleteKeyword(button) {
             const row = button.closest('tr');
             const keywordId = row.getAttribute('data-id');
+            console.log('Keyword ID to delete:', keywordId);  // Debug log
 
             fetch('/deleteKeywordBank', {
                 method: 'POST',
