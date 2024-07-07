@@ -12,7 +12,7 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     port=3306,
-    password="",
+    password="Password_123",
     database="pharmadia_db3"
 )
 
@@ -96,29 +96,24 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        print(f"Attempting login with username: {username}")
-
         cursor = db.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM authorization WHERE username = %s", (username,))
+        query = "SELECT * FROM authorization WHERE username = %s"
+        cursor.execute(query, (username,))
         user = cursor.fetchone()
         cursor.close()
 
         if user:
-            print(f"User found: {user['username']}")
-            print(f"Stored password: {user['password']}")
-            print(f"Entered password: {password}")
             if user['password'] == password:
                 session['user_id'] = user['auth_id']
                 session['username'] = user['username']
                 return redirect(url_for('admin'))
             else:
-                print("Password check failed")
-                return render_template('login.html', error="Invalid username or password.")
+                return render_template('login.html', error="Username dan password salah, silakan coba lagi.")
         else:
-            print("User not found")
-            return render_template('login.html', error="Invalid username or password.")
-
+            return render_template('login.html', error="Username dan password salah, silakan coba lagi.")
+    
     return render_template('login.html')
+
 
 # Route untuk halaman admin
 @app.route('/admin')
