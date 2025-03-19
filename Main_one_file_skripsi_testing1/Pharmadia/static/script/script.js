@@ -9,7 +9,6 @@ document.getElementById("diseaseInput").addEventListener("keypress", function(ev
 function performSearch() {
     var query = document.getElementById("diseaseInput").value.trim();
     if (query !== '') {
-        // Melakukan redirection ke halaman result page
         window.location.href = "/result-page?query=" + encodeURIComponent(query);
     }
 }
